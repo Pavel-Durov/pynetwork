@@ -11,7 +11,7 @@ class GlobalConfig:
         self.__ping_constraint = self.__check_for_none(ping_constraint)
 
         #Sets whether use real time network check (mainly used for DEBUG purposes)
-        self.__real_network_check = False
+        self.__real_network_check = True
         #Sets whether writing local file with the mail html content
         self.__write_to_local_html_file = False
         #Sets whether send a mail when network check is completed"""
