@@ -1,0 +1,94 @@
+h1 { 
+	color: #111; 
+	font-family: 'Open Sans Condensed', sans-serif; 
+	font-size: 46px; 
+	font-weight: 350; 
+	line-height: 64px; 
+	margin: 0 0 0; 
+	padding: 20px 30px; 
+	text-align: center; 
+	text-transform: uppercase; 
+}
+
+h2 { 
+color: #111; 
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 700; 
+	line-height: 48px; 
+	margin: 0,0,0,24px; 
+	text-align: center; 
+	text-transform: uppercase; 
+}
+
+span { 
+	color: #111; 
+	font-family: 'Open Sans', sans-serif; 
+	font-size: 16px; 
+	line-height: 28px; 
+	margin: auto;
+}
+
+.date { 
+	color: #111; display: block; 
+	font-family: 'Open Sans', sans-serif; 
+	font-size: 26px; 
+	position: relative; 
+	text-align: center; 
+	z-index: 1;
+}
+
+.author { 
+	color: #111; 
+	display: block; 
+	font-family: 'Open Sans', sans-serif; 
+	font-size: 16px; 
+	padding-bottom: 38px; 
+	position: relative; 
+	text-align: center; 
+	z-index: 1; 
+}
+
+.author:before { 
+	border-top: 1px solid #111; 
+	content: ""; 
+	position: absolute; 
+	top: 12px; 
+	left: 0; 
+	width: 100%; 
+	z-index: -1; 
+}
+
+
+.author span { 
+	background: #fdfdfd; 
+	padding: 0 10px; 
+	text-transform: uppercase; 
+}
+
+.line { 
+	border-top: 1px solid #111; 
+	display: block; 
+	margin-top: 60px; 
+	padding-top: 50px; 
+	position: relative;	
+}
+
+span.row{
+	display: table-row;
+    text-align: left;
+}
+
+div.table{
+    display: table
+}
+
+body{
+    padding: 50px;
+}
+.ok{
+    background: #e2dcdd
+}
+
+.not-ok{
+    background: #e82949
+}

@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+
+# config files
+launch.json
+cSpell.json
+
+# output files
+**/data/
+**/html/
+
+
