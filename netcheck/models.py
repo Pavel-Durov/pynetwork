@@ -18,13 +18,18 @@ class GlobalConfig:
         self.__send_mail = True
         #Sets for attaching chart html to mail
         self.__attach_mail_chart = True
+	#Paths set
         self.PROJ_PATH = os.path.dirname(os.path.abspath(__file__))
+	self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
+	self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
+	self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
+	self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
 
     PROJ_PATH = ''
-    MAIN_CSS_PATH = PROJ_PATH + "/css/mail.css"
-    OUTPUT_HTML_FILE = PROJ_PATH + "/html/email.html"
-    ANALYTICS_OUTPUT_DIR = PROJ_PATH + "/data/"
-    CHART_HTML_DIR = PROJ_PATH + "/html/"
+    MAIN_CSS_PATH = ''
+    OUTPUT_HTML_FILE = ''
+    ANALYTICS_OUTPUT_DIR = ''
+    CHART_HTML_DIR = ''
 
     CHART_HTML_POSTFIX = "_chart.html"
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
