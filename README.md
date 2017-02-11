@@ -50,3 +50,10 @@ Data files hierarchy:
             /<date>_uploads.csv  (pure csv file: only uploads mesurements)
             /<date>_downlads.csv (pure csv file: only downloads mesurements)
 ```
+
+## Dependencies
+```
+pip install pyspeedtest
+pip install mail
+pip install requests
+```
