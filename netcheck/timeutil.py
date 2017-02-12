@@ -1,3 +1,4 @@
+"""Utility script for time parsing/formating"""
 
 import datetime
 
