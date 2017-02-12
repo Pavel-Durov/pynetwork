@@ -15,20 +15,19 @@ class EmailSender:
     """Responsible for emails sending"""
 
     SUBJECT_EMAIL = "Here is your network check update."
-    GM_PA = '<your device gmail password>'
     GMAIL_SMTP = 'smtp.gmail.com:587'
 
     def send_gmail(self, message_content):
         """Sends gmail to specified account"""
 
-        print("sending email to: "  + self.__config.RECEIVER_GMAIL_ACCOUNT)
+        print("sending email to: "  + self.__config.get_receiver_gmail_account)
         server = smtplib.SMTP(self.GMAIL_SMTP)
         server.ehlo()
         server.starttls()
 
         # Record the MIME types of both parts - text/plain and text/html.
-        sender = self.__config.DEVICE_GMAIL_ACCOUNT
-        receiver = self.__config.RECEIVER_GMAIL_ACCOUNT
+        sender = self.__config.get_agent_gmail_account
+        receiver = self.__config.get_receiver_gmail_account
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.SUBJECT_EMAIL
@@ -41,7 +40,7 @@ class EmailSender:
 
         # Attach parts into message container.
         msg.attach(MIMEText(message_content, 'html'))
-        if server.login(sender, self.__config.DEVICE_GMAIL_PASSWORD):
+        if server.login(sender, self.__config.get_agent_gmail_password):
             server.sendmail(sender, receiver, msg.as_string())
             server.quit()
         else:
