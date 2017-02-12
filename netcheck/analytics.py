@@ -60,8 +60,8 @@ class DataDump:
         formatted = self.__format_to_json(result)
         json_data = fsutil.read_json_from_file(file_path)
         json_data.append(formatted)
-        print(json_data)
-        fsutil.write_to_file(file_path, json.dumps(json_data))
+
+        fsutil.write_json_to_file(file_path, json_data)
 
     def dump(self, result):
         """Writes speed test results to a files"""
@@ -70,8 +70,8 @@ class DataDump:
         uploads_file = get_uploads_file_path(result.get_time_stamp, self.__conf)
         json_file = get_jsondata_file_path(result.get_time_stamp, self.__conf)
 
-        self.__dump_csv(result.get_download_speed, downloads_file)
-        self.__dump_csv(result.get_upload_speed, uploads_file)
+        #self.__dump_csv(result.get_download_speed, downloads_file)
+        #self.__dump_csv(result.get_upload_speed, uploads_file)
         self.__dump_json(result, json_file)
 
     def __format_to_json(self, result):
@@ -81,5 +81,5 @@ class DataDump:
         data["ping"] = str(result.get_ping_speed)
         time_str = timeutil.format_to_time_str(result.get_time_stamp)
         data["timeStamp"] = time_str
-        json_str = json.dumps(data)
-        return json_str
+        
+        return data

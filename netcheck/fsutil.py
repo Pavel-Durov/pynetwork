@@ -2,6 +2,7 @@
 
 import os
 import json
+from json import JSONEncoder
 
 def recheck__dir(daily_dir):
     """Creates directory if not exists"""
@@ -35,6 +36,15 @@ def write_to_file(path, content):
     except IOError:
         print("IOError, path: " + path)
 
+def write_json_to_file(path, data):
+    """Writes json object to specified absolute file path"""
+    try:
+        with open(path, 'w') as outfile:
+            json.dump(data, outfile)
+    except IOError:
+        print("IOError, path: " + path)
+
+
 def get_file_content(file_path):
     """Reads and returns content of a file"""
     try:
@@ -57,4 +67,3 @@ def read_json_from_file(file_path):
             return json.loads("[]")
     except IOError:
         print("IO ERROR - " + file_path)
-

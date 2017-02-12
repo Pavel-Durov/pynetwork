@@ -1,5 +1,6 @@
 """Script for generating html chart file (./html directory) based on local data files"""
 
+import json
 import fsutil
 import timeutil
 import analytics
@@ -17,10 +18,10 @@ class ChartGenerator:
 
     def generate_chart(self, time_stamp):
         """Generates chart based on given data, and outputs html file with the result"""
-        downloads_data_file = analytics.get_downloads_csv_data(time_stamp, self.__config)
-        uploads_data_file = analytics.get_uploads_csv_data(time_stamp, self.__config)
+        json_path = analytics.get_jsondata_file_path(time_stamp, self.__config)
+        json_content = fsutil.read_json_from_file(json_path)
 
-        html = self.__generate_html("["+downloads_data_file+"]", "["+uploads_data_file+"]")
+        html = self.__generate_html(json.dumps(json_content))
         self.__write_html_chart(html, time_stamp)
 
     def __write_html_chart(self, content, time_stamp):
@@ -29,7 +30,7 @@ class ChartGenerator:
         fsutil.write_to_file(path, content)
 
 
-    def __generate_html(self, uploads_arr, downloads_arr):
+    def __generate_html(self, json_array):
 
         html_str = """
         <!DOCTYPE html>
@@ -41,13 +42,12 @@ class ChartGenerator:
         <body>
             <canvas id="myChart"></canvas>
             <script>
-                var downloadData = """+ downloads_arr+ """
-                var uploadData = """ + uploads_arr+"""
+                var data = """+ json_array + """;
+                
                 var ctx = document.getElementById('myChart').getContext('2d');
-                labels =  ['00:00', '01:00', '02:00','03:00', '04:00', '05:00',
-                            '06:00', '07:00', '08:00','09:00', '10:00', '11:00',
-                            '12:00', '13:00', '14:00','15:00', '16:00', '17:00',
-                            '18:00', '19:00', '20:00','21:00', '22:00', '23:00'];
+                uploadData = data.map(function(x){ return x.upload});
+				downloadData = data.map(function(x){ return x.download});
+				labels = data.map(function(x){ return (new Date(Date.parse(x.timeStamp))).toLocaleTimeString();});
 
                 upload_data_set = {label: 'upload', data: downloadData, backgroundColor: "rgba(255,153,0,0.4)"};
                 download_data_set = {label: 'download', data: uploadData, backgroundColor: "rgba(255,153,0,0.4)"};
