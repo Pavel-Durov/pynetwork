@@ -3,7 +3,7 @@
     "writeLocalHtml" : false,
     "sendMail": true,
     "attachMailChart" : true,
-    "receiverGmailAccount" : "pdurov0@gmail.com",
-    "agentGmailAccount" : "raspavelpi",
-    "agentGmailPassword" : "1@3RaspberryPavelPi"
+    "receiverGmailAccount" : "",
+    "agentGmailAccount" : "",
+    "agentGmailPassword" : ""
 }
