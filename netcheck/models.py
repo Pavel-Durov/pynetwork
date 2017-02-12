@@ -10,20 +10,21 @@ class GlobalConfig:
         self.__download_constraint = self.__check_for_none(download_constraint)
         self.__ping_constraint = self.__check_for_none(ping_constraint)
 
+
         #Sets whether use real time network check (mainly used for DEBUG purposes)
-        self.__real_network_check = True
+        self.__real_network_check = False
         #Sets whether writing local file with the mail html content
         self.__write_to_local_html_file = False
         #Sets whether send a mail when network check is completed"""
-        self.__send_mail = True
+        self.__send_mail = False
         #Sets for attaching chart html to mail
         self.__attach_mail_chart = True
-	#Paths set
+	    #Paths set
         self.PROJ_PATH = os.path.dirname(os.path.abspath(__file__))
-	self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
-	self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
-	self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
-	self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
+        self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
+        self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
+        self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
+        self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
 
     PROJ_PATH = ''
     MAIN_CSS_PATH = ''
@@ -36,10 +37,10 @@ class GlobalConfig:
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
     JSON_DATA_FILENAME = "_data.json"
 
-    RECEIVER_GMAIL_ACCOUNT = '<receiver gmail address>'
-    DEVICE_GMAIL_ACCOUNT = '<sender gmail address>'
+    RECEIVER_GMAIL_ACCOUNT = 'pdurov0@gmail.com'#'<receiver gmail address>'
+    DEVICE_GMAIL_ACCOUNT = 'raspavelpi'#'<sender gmail address>'
     #TODO:This is way insecure : Figureout how to sore password in more reliable way (keyring?)
-    DEVICE_GMAIL_PASSWORD = '<sender gmail password>'
+    DEVICE_GMAIL_PASSWORD = '1@3RaspberryPavelPi'#'<sender gmail password>'
 
     EMAIL_SEND_LEGIT_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     UNSET_CONSTRAINT = -1
@@ -88,23 +89,22 @@ class GlobalConfig:
 
     def is_legit_hour_for_mail(self, time_stamp):
         """Checks whether the given date is in range of email sending hours configuration"""
-        hour = datetime.datetime.fromtimestamp(time_stamp).hour
-        return hour in self.EMAIL_SEND_LEGIT_HOURS
+        return time_stamp.hour in self.EMAIL_SEND_LEGIT_HOURS
 
 
 class SpeedTestResult:
     """Contains speed test result"""
 
-    def __init__(self, download, upload, ping, time_stamp):
+    def __init__(self, download, upload, ping, utc_time):
         self.__download = download
         self.__upload = upload
         self.__ping = ping
-        self.__measurement_time_stamp = time_stamp
+        self.__measurement_utc_time = utc_time
 
     @property
     def get_time_stamp(self):
-        """Public getter for __measurement_time_stamp"""
-        return self.__measurement_time_stamp
+        """Returns utc time of the measurement"""
+        return self.__measurement_utc_time
 
     @property
     def get_download_speed(self):

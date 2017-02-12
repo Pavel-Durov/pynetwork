@@ -1,11 +1,12 @@
 """Script for generating html chart file (./html directory) based on local data files"""
 
 import fsutil
+import timeutil
 import analytics
 
-def get_daily_chart_path(config, time_stamp):
+def get_daily_chart_path(config, time):
     """Returns full path of todays' chart """
-    time_str = analytics.get_file_name_from_timestamp(time_stamp)
+    time_str = timeutil.format_to_date_str(time)
     path = config.CHART_HTML_DIR + time_str + config.CHART_HTML_POSTFIX
     return path
 

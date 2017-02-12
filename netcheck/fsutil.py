@@ -1,6 +1,7 @@
 """Utility script for filesystem management"""
 
 import os
+import json
 
 def recheck__dir(daily_dir):
     """Creates directory if not exists"""
@@ -39,6 +40,21 @@ def get_file_content(file_path):
     try:
         with open(file_path, 'r') as content_file:
             return content_file.read()
+    except IOError:
+        print("IO ERROR - " + file_path)
+
+def read_json_from_file(file_path):
+    """Reads or creates new file if not exists"""
+    try:
+        if file_exist(file_path):
+            with open(file_path) as json_file:
+                raw_json = json_file.read()
+            return json.loads(raw_json)
+        else:
+            with open(file_path, 'w') as json_file:
+                json_file.write("")
+
+            return json.loads("[]")
     except IOError:
         print("IO ERROR - " + file_path)
 

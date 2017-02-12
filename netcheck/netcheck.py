@@ -1,9 +1,9 @@
 """ Network Upload, Download, Ping speed check script"""
 #!/usr/bin/python
 
-import time
 import argparse
 import pyspeedtest
+import timeutil
 from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
@@ -23,13 +23,13 @@ def check_speed():
     ping = round(speed_test.ping(), 2)
     print("ping speed: " + str(ping))
 
-    return SpeedTestResult(download, upload, ping, time.time())
+    return SpeedTestResult(download, upload, ping, timeutil.utc_now())
 
 def __main(config):
     if config.get_real_network_check:
         speed_result = check_speed()
     else:
-        speed_result = SpeedTestResult(2, 3, 4, time.time())
+        speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
 
     log = DataDump(config)
     log.dump(speed_result)

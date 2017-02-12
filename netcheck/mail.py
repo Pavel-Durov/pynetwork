@@ -1,10 +1,10 @@
 """Script for generating mail content and sending emails to gmail accounts"""
 
-import datetime
 import smtplib
 import chart
 import time
 import fsutil
+import timeutil
 from requests import get
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -35,7 +35,7 @@ class EmailSender:
         msg['From'] = sender
         msg['To'] = receiver
 
-        filename = chart.get_daily_chart_path(self.__config, time.time())
+        filename = chart.get_daily_chart_path(self.__config, timeutil.utc_now())
         if self.__config.get_attach_mail_chart and fsutil.file_exist(filename):
             self.__attach_chart(filename, msg)
 
@@ -147,7 +147,7 @@ class MessageFormatter:
         title = self.__speed_check_title_html(result)
 
         css = self.__get_css()
-        time_stamp = str(datetime.datetime.fromtimestamp(result.get_time_stamp))
+        time_stamp = timeutil.format_to_time_str(result.get_time_stamp)
 
         body_css_class = ""
 

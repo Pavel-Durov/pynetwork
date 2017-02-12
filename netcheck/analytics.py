@@ -9,8 +9,8 @@
 #                   /...
 
 import json
-import datetime
 import fsutil
+import timeutil
 
 def get_downloads_csv_data(time_stamp, config):
     """Reads csv content from downloads data file"""
@@ -25,26 +25,21 @@ def get_uploads_csv_data(time_stamp, config):
 
 def get_downloads_file_path(time_stamp, config):
     """Constructs and returns downloads csv file absolute path"""
-    time_str = get_file_name_from_timestamp(time_stamp)
+    time_str = timeutil.format_to_date_str(time_stamp)
     out_dir = get_output_dir(time_str, config)
     return out_dir + time_str +  config.DOWNLOADS_CSV_FILE_POSTFIX
 
 def get_uploads_file_path(time_stamp, config):
     """Constructs and returns csv file absolute path"""
-    time_str = get_file_name_from_timestamp(time_stamp)
+    time_str = timeutil.format_to_date_str(time_stamp)
     out_dir = get_output_dir(time_str, config)
     return out_dir + time_str +  config.UPLOADS_CSV_FILE_POSTFIX
 
 def get_jsondata_file_path(time_stamp, config):
     """Constructs and returns json data file absolute path"""
-    time_str = get_file_name_from_timestamp(time_stamp)
+    time_str = timeutil.format_to_date_str(time_stamp)
     out_dir = get_output_dir(time_str, config)
     return out_dir + time_str +  config.JSON_DATA_FILENAME
-
-
-def get_file_name_from_timestamp(time_stamp):
-    """Constructs and returns file name convention, base on given timestamp"""
-    return datetime.datetime.fromtimestamp(time_stamp).strftime("%Y-%m-%d")
 
 def get_output_dir(time_str, config):
     """Constructs and returns root directory of data files"""
@@ -63,7 +58,10 @@ class DataDump:
 
     def __dump_json(self, result, file_path):
         formatted = self.__format_to_json(result)
-        fsutil.write_or_append(file_path, ",\r\n" + formatted, formatted)
+        json_data = fsutil.read_json_from_file(file_path)
+        json_data.append(formatted)
+        print(json_data)
+        fsutil.write_to_file(file_path, json.dumps(json_data))
 
     def dump(self, result):
         """Writes speed test results to a files"""
@@ -81,7 +79,7 @@ class DataDump:
         data["upload"] = str(result.get_upload_speed)
         data["download"] = str(result.get_download_speed)
         data["ping"] = str(result.get_ping_speed)
-        data["timeStamp"] = str(result.get_time_stamp)
+        time_str = timeutil.format_to_time_str(result.get_time_stamp)
+        data["timeStamp"] = time_str
         json_str = json.dumps(data)
-
         return json_str
