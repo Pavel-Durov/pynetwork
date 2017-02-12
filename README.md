@@ -29,13 +29,13 @@ netcheck.py -u 4
     "sendMail": false,
 	//Sets for attaching chart html to mail
     "attachMailChart" : true
-	//Mail receiver
+	//Need to be configured if you want to receive mails
 	"recieverGmailAccount" : "<receiver gmail account>",
 	"agentGmailAccount" : "<agent gmail account>",
 	"agentGmailPassword" : "<agent gmail password>"
 }
-
-##Data Files:
+```
+## Data Files:
 
 netcheck.py generates data files as its output. So you can browse history of your network performance.
 * Daily charts can be found under : ./data/<date>chart.html
