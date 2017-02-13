@@ -50,7 +50,7 @@ class ChartGenerator:
                 pingData = data.map(function(x){ return x.ping});
 
 				labels = data.map(function(x) { 
-                    return new Date((new Date(0)).setUTCSeconds(1486983890)).toLocaleTimeString()
+                    return new Date((new Date(0)).setUTCSeconds(x.utcEpoch)).toLocaleTimeString()
                 });
 
                 upload_data_set = {label: 'upload', data: downloadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
