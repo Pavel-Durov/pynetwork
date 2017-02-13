@@ -45,6 +45,5 @@ class DataDump:
         data["download"] = str(result.get_download_speed)
         data["ping"] = str(result.get_ping_speed)
         time_str = timeutil.format_to_time_str(result.get_time_stamp)
-        data["timeStamp"] = time_str
-
+        data["utcEpoch"] = timeutil.utc_now_epoch()
         return data

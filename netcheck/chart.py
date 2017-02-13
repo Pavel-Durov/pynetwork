@@ -47,15 +47,20 @@ class ChartGenerator:
                 var ctx = document.getElementById('myChart').getContext('2d');
                 uploadData = data.map(function(x){ return x.upload});
 				downloadData = data.map(function(x){ return x.download});
-				labels = data.map(function(x){ return (new Date(Date.parse(x.timeStamp))).toLocaleTimeString();});
+                pingData = data.map(function(x){ return x.ping});
 
-                upload_data_set = {label: 'upload', data: downloadData, backgroundColor: "rgba(255,153,0,0.4)"};
-                download_data_set = {label: 'download', data: uploadData, backgroundColor: "rgba(255,153,0,0.4)"};
+				labels = data.map(function(x) { 
+                    return new Date((new Date(0)).setUTCSeconds(1486983890)).toLocaleTimeString()
+                });
+
+                upload_data_set = {label: 'upload', data: downloadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
+                download_data_set = {label: 'download', data: uploadData, backgroundColor: "rgba(0, 153, 51, 0.4)"};
+                ping_data_set = {label: 'ping', data: pingData, backgroundColor: "rgba(83, 83, 198, 0.4)"};
                 new Chart(ctx, {
                     type: 'line',
                         data: {
                         labels: labels,
-                        datasets: [upload_data_set , download_data_set ]
+                        datasets: [upload_data_set , download_data_set, ping_data_set]
                     }
                 });
             </script>
