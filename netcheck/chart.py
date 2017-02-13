@@ -53,8 +53,8 @@ class ChartGenerator:
                     return new Date((new Date(0)).setUTCSeconds(x.utcEpoch)).toLocaleTimeString()
                 });
 
-                upload_data_set = {label: 'upload', data: downloadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
-                download_data_set = {label: 'download', data: uploadData, backgroundColor: "rgba(0, 153, 51, 0.4)"};
+                upload_data_set = {label: 'upload', data: uploadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
+                download_data_set = {label: 'download', data: downloadData, backgroundColor: "rgba(0, 153, 51, 0.4)"};
                 ping_data_set = {label: 'ping', data: pingData, backgroundColor: "rgba(83, 83, 198, 0.4)"};
                 new Chart(ctx, {
                     type: 'line',
