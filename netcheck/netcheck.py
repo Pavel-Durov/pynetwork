@@ -40,10 +40,10 @@ def __main(config):
     email_sender = EmailSender(config)
     time_stamp = speed_result.get_time_stamp
 
+    ChartGenerator(config).generate_chart(time_stamp)
+
     if config.get_send_mail and config.is_legit_hour_for_mail(time_stamp):
         email_sender.send_gmail(message)
-
-    ChartGenerator(config).generate_chart(time_stamp)
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
