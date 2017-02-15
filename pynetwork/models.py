@@ -32,6 +32,7 @@ class GlobalConfig:
         self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
         self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
         self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
+        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/config.secrets.json"
 
         json_config = fsutil.read_json_from_file(self.CONFIG_JSON_FILE)
 
@@ -43,13 +44,14 @@ class GlobalConfig:
         self.__send_mail = json_config["sendMail"]
         #Sets for attaching chart html to mail
         self.__attach_mail_chart = json_config["attachMailChart"]
-
-        self.__receiver_gmail_account = json_config["receiverGmailAccount"]
-        self.__agent_gmail_account = json_config["agentGmailAccount"]
-        #This is way insecure : Figureout how to sore password in more reliable way (keyring?)
-        self.__agent_gmail_password = json_config["agentGmailPassword"]
-
         self.__upload_results_to_gdrive = json_config["uploadResultsToGdrive"]
+
+        json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
+        self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
+        self.__agent_gmail_account = json_secret["agentGmailAccount"]
+        #This is way insecure : Figureout how to sore password in more reliable way (keyring?)
+        self.__agent_gmail_password = json_secret["agentGmailPassword"]
+
 
 
     @property
