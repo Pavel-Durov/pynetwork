@@ -1,15 +1,17 @@
 """ Network Upload, Download, Ping speed check script"""
 #!/usr/bin/python
 
+import chart
 import argparse
-import pyspeedtest
+import fsutil
 import timeutil
+import pyspeedtest
 from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
 from models import SpeedTestResult
 from analytics import DataDump
-from chart import ChartGenerator
+from gdrive import GoogleDriveApi
 
 def check_speed():
     """Network Speed Check"""
@@ -45,6 +47,13 @@ def __main(config):
     if config.get_send_mail and config.is_legit_hour_for_mail(time_stamp):
         email_sender.send_gmail(message)
 
+    chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
+
+    if config.get_upload_results_to_gdrive:
+        gdrive_api = GoogleDriveApi()
+
+        gdrive_api.upload_file(timeutil.format_to_date_str(time_stamp),
+                               chart_path,gdriveApi.HTML_MIME)
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
 

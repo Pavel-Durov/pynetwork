@@ -17,17 +17,21 @@ class ChartGenerator:
         self.__config = config
 
     def generate_chart(self, time_stamp):
-        """Generates chart based on given data, and outputs html file with the result"""
+        """Generates chart based on given data, and outputs html file with the result
+            Returns:
+                path to the chart
+        """
         json_path = analytics.get_jsondata_file_path(time_stamp, self.__config)
         json_content = fsutil.read_json_from_file(json_path)
 
         html = self.__generate_html(json.dumps(json_content))
-        self.__write_html_chart(html, time_stamp)
+        return self.__write_html_chart(html, time_stamp)
 
     def __write_html_chart(self, content, time_stamp):
         fsutil.recheck__dir(self.__config.CHART_HTML_DIR)
         path = get_daily_chart_path(self.__config, time_stamp)
         fsutil.write_to_file(path, content)
+        return path
 
 
     def __generate_html(self, json_array):

@@ -53,4 +53,6 @@ Data files hierarchy:
 pip install pyspeedtest
 pip install mail
 pip install requests
+pip install --upgrade google-api-python-client
+pip install httplib2
 ```

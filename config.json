@@ -1,0 +1,10 @@
+{   
+    "uploadResultsToGdrive" : true,
+    "realNetworkCheck" : false,
+    "writeLocalHtml" : true,
+    "sendMail": false,
+    "attachMailChart" : true,
+    "receiverGmailAccount" : "<reciever gmail account>",
+    "agentGmailAccount" : "<gmail account>",
+    "agentGmailPassword" : "<gmail password>"
+}

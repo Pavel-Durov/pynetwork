@@ -1,9 +1,0 @@
-{
-    "realNetworkCheck" : false,
-    "writeLocalHtml" : false,
-    "sendMail": true,
-    "attachMailChart" : true,
-    "receiverGmailAccount" : "",
-    "agentGmailAccount" : "",
-    "agentGmailPassword" : ""
-}

@@ -16,7 +16,6 @@ class GlobalConfig:
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
     JSON_DATA_FILENAME = "_data.json"
 
-    EMAIL_SEND_LEGIT_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     UNSET_CONSTRAINT = -1
 
 
@@ -32,7 +31,7 @@ class GlobalConfig:
         self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
         self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
         self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
-        self.CONFIG_JSON_FILE = self.PROJ_PATH + "/config.json"
+        self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
 
         json_config = fsutil.read_json_from_file(self.CONFIG_JSON_FILE)
 
@@ -49,7 +48,15 @@ class GlobalConfig:
         self.__agent_gmail_account = json_config["agentGmailAccount"]
         #This is way insecure : Figureout how to sore password in more reliable way (keyring?)
         self.__agent_gmail_password = json_config["agentGmailPassword"]
-        
+
+        self.__upload_results_to_gdrive = json_config["uploadResultsToGdrive"]
+
+
+    @property
+    def get_upload_results_to_gdrive(self):
+        """Configuration for whether upload test reusult to google drive"""
+        return self.__upload_results_to_gdrive
+
     @property
     def get_receiver_gmail_account(self):
         """Receiver gmail account"""
@@ -106,10 +113,10 @@ class GlobalConfig:
         else:
             return value
 
-
-    def is_legit_hour_for_mail(self, time_stamp):
+    @staticmethod
+    def is_legit_hour_for_mail(time_stamp):
         """Checks whether the given date is in range of email sending hours configuration"""
-        return time_stamp.hour in self.EMAIL_SEND_LEGIT_HOURS
+        return time_stamp.hour in [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 
 class SpeedTestResult:
