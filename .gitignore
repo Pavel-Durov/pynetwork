@@ -9,10 +9,10 @@ cSpell.json
 # output files
 **/data/
 **/html/
-**/gdrive/*.bak
-**/gdrive/*.dat
-**/gdrive/*.dat
+**/shelve/*.bak
+**/shelve/*.dat
+**/shelve/*.dat
 *.dir
 
 #secrets
-**/gdrive/client_secrets.json
+**/secrets/

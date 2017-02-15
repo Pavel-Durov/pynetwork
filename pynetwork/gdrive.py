@@ -27,7 +27,7 @@ class GoogleDriveApi:
     #Full, permissive scope to access all of a user's files, excluding the Application Data folder.
     GOD_MODE_DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive'
 
-    CLIENT_SECRET_FILE = 'client_secret.json'
+    CLIENT_SECRET_FILE = 'secrets/client_secret.json'
     APPLICATION_NAME = 'pyNetCheck'
     CREDENTIAL_JSON = APPLICATION_NAME + ".json"
 
@@ -45,7 +45,7 @@ class GoogleDriveApi:
         http = credentials.authorize(httplib2.Http())
         self.__drive_service = discovery.build('drive', 'v3', http=http)
 
-        shelve_path = os.path.dirname(os.path.abspath(__file__)) + ".cache"
+        shelve_path = os.path.dirname(os.path.abspath(__file__)) + "/shelve/.cache"
         self.__shelve = shelve.open(shelve_path)
         self.__recheck_root_dir()
 
