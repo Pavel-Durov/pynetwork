@@ -71,15 +71,13 @@ class GoogleDriveApi:
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
-
         credential_path = os.path.join(credential_dir, self.CREDENTIAL_JSON)
+
         store = Storage(credential_path)
         credentials = store.get()
 
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(self.CLIENT_SECRET_FILE,
-                                                  self.GOD_MODE_DRIVE_SCOPE)
-
+            flow = client.flow_from_clientsecrets(self.CLIENT_SECRET_FILE, self.GOD_MODE_DRIVE_SCOPE)
             flow.user_agent = self.APPLICATION_NAME
             credentials = tools.run_flow(flow, store)
             print('Storing credentials to ' + credential_path)
@@ -102,4 +100,3 @@ class GoogleDriveApi:
 
 if __name__ == "__main__":
     drive_api = GoogleDriveApi()
-    drive_api.upload_file("test", "c:/Temp/OU_Package.txt", drive_api.PLAIN_TEXT_MIME)
