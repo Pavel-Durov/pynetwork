@@ -3,5 +3,5 @@
     "realNetworkCheck" : false,
     "writeLocalHtml" : true,
     "sendMail": false,
-    "attachMailChart" : true,
+    "attachMailChart" : true
 }

@@ -5,12 +5,12 @@ import datetime
 class GlobalConfig:
     """Global configuration for network speed check"""
 
-    PROJ_PATH = ''
-    MAIN_CSS_PATH = ''
-    OUTPUT_HTML_FILE = ''
-    ANALYTICS_OUTPUT_DIR = ''
-    CHART_HTML_DIR = ''
-    CONFIG_JSON_FILE = ''
+    PROJ_PATH = None
+    MAIN_CSS_PATH = None
+    OUTPUT_HTML_FILE = None
+    ANALYTICS_OUTPUT_DIR = None
+    CHART_HTML_DIR = None
+    CONFIG_JSON_FILE = None
     CHART_HTML_POSTFIX = "_chart.html"
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
@@ -32,7 +32,7 @@ class GlobalConfig:
         self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
         self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
         self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
-        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/config.secrets.json"
+        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secrets.json"
 
         json_config = fsutil.read_json_from_file(self.CONFIG_JSON_FILE)
 

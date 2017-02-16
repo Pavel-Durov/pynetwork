@@ -42,7 +42,7 @@ def __main(config):
     email_sender = EmailSender(config)
     time_stamp = speed_result.get_time_stamp
 
-    ChartGenerator(config).generate_chart(time_stamp)
+    chart.ChartGenerator(config).generate_chart(time_stamp)
 
     if config.get_send_mail and config.is_legit_hour_for_mail(time_stamp):
         email_sender.send_gmail(message)
@@ -51,10 +51,9 @@ def __main(config):
 
     if config.get_upload_results_to_gdrive:
         gdrive_api = GoogleDriveApi()
+        gdrive_api.upload_html_file(timeutil.format_to_date_str(time_stamp),chart_path)
 
-        gdrive_api.upload_file(timeutil.format_to_date_str(time_stamp),
-                               chart_path,gdriveApi.HTML_MIME)
-if __name__ == "__main__":
+def main():
     arg_parser = argparse.ArgumentParser()
 
     arg_parser.add_argument("-d", help="Download speed constraint", type=float)
@@ -66,6 +65,9 @@ if __name__ == "__main__":
     configuration = GlobalConfig(args.u, args.d, args.p)
 
     __main(configuration)
+    
+if __name__ == "__main__":
+    main()
 
 
 

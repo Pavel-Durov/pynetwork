@@ -34,6 +34,7 @@ class GoogleDriveApi:
     APPLICATION_ROOT_FOLDER_ID = None
     APPLICATION_ROOT_FOLDER_ID_KEY = "APPLICATION_ROOT_FOLDER_ID"
 
+    #mime types
     PLAIN_TEXT_MIME = 'text/plain'
     HTML_MIME = 'text/html'
     JSON_MIME = 'application/json'
@@ -84,8 +85,11 @@ class GoogleDriveApi:
 
         return credentials
 
-    def upload_file(self, cloud_file_name, file_path, file_mime):
-        """Creates folder under the project root directory"""
+    def upload_html_file(self, cloud_file_name, file_path):
+        """Creates html file under the project root directory"""
+        self.__upload_file(cloud_file_name, file_path, self.HTML_MIME)
+
+    def __upload_file(self, cloud_file_name, file_path, file_mime):
         file_metadata = {
             'name' : cloud_file_name,
             'parents': [self.APPLICATION_ROOT_FOLDER_ID]
