@@ -5,7 +5,6 @@
 #                   /<date directory>
 #                     /<date>.json         (global data file: contains all of the information)
 
-
 import json
 import fsutil
 import timeutil
@@ -34,10 +33,10 @@ class DataDump:
 
         fsutil.write_json_to_file(file_path, json_data)
 
-    def dump(self, result):
-        """Writes speed test results to a files"""
-        json_file = get_jsondata_file_path(result.get_time_stamp, self.__conf)
-        self.__dump_json(result, json_file)
+    def dump(self, speet_result):
+        """Writes speed test results to a json file"""
+        json_file = get_jsondata_file_path(speet_result.get_time_stamp, self.__conf)
+        self.__dump_json(speet_result, json_file)
 
     def __format_to_json(self, result):
         data = {}

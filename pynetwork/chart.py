@@ -19,7 +19,7 @@ class ChartGenerator:
     def generate_chart(self, time_stamp):
         """Generates chart based on given data, and outputs html file with the result
             Returns:
-                path to the chart
+                path to the output chart file
         """
         json_path = analytics.get_jsondata_file_path(time_stamp, self.__config)
         json_content = fsutil.read_json_from_file(json_path)
@@ -35,8 +35,7 @@ class ChartGenerator:
 
 
     def __generate_html(self, json_array):
-
-        html_str = """
+        return """
         <!DOCTYPE html>
         <meta charset="utf-8"/>
         <html lang="en">
@@ -71,4 +70,3 @@ class ChartGenerator:
         </body>	
         </html>
         """
-        return html_str

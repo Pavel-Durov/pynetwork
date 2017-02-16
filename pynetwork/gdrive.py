@@ -33,6 +33,7 @@ class GoogleDriveApi:
 
     APPLICATION_ROOT_FOLDER_ID = None
     APPLICATION_ROOT_FOLDER_ID_KEY = "APPLICATION_ROOT_FOLDER_ID"
+    SHELVE_FILE = "/shelve/.cache"
 
     #mime types
     PLAIN_TEXT_MIME = 'text/plain'
@@ -41,12 +42,12 @@ class GoogleDriveApi:
     DIR_MIME = 'application/vnd.google-apps.folder'
 
     def __init__(self):
-        """Initialize GoogleDriveApi class, (authentication) + file management"""
+        """Initialize GoogleDriveApi class, manages authentication and file management"""
         credentials = self.__get_credentials()
         http = credentials.authorize(httplib2.Http())
         self.__drive_service = discovery.build('drive', 'v3', http=http)
 
-        shelve_path = os.path.dirname(os.path.abspath(__file__)) + "/shelve/.cache"
+        shelve_path = os.path.dirname(os.path.abspath(__file__)) + self.SHELVE_FILE
         self.__shelve = shelve.open(shelve_path)
         self.__recheck_root_dir()
 
@@ -64,8 +65,7 @@ class GoogleDriveApi:
         }
         files = self.__drive_service.files()
         file = files.create(body=file_metadata,fields='id').execute()
-        self.__shelve[self.APPLICATION_ROOT_FOLDER_ID_KEY] = file.get('id')          
-        print('Root folder created,  ID: %s' % file.get('id'))
+        self.__shelve[self.APPLICATION_ROOT_FOLDER_ID_KEY] = file.get('id')
 
     def __get_credentials(self):
         home_dir = os.path.expanduser('~')
@@ -73,7 +73,6 @@ class GoogleDriveApi:
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
         credential_path = os.path.join(credential_dir, self.CREDENTIAL_JSON)
-
         store = Storage(credential_path)
         credentials = store.get()
 
@@ -86,8 +85,12 @@ class GoogleDriveApi:
         return credentials
 
     def upload_html_file(self, cloud_file_name, file_path):
-        """Creates html file under the project root directory"""
+        """Uploads html file to Google Drive"""
         self.__upload_file(cloud_file_name, file_path, self.HTML_MIME)
+
+    def upload_json_file(self, cloud_file_name, file_path):
+        """Uploads json file to Google Drive"""
+        self.__upload_file(cloud_file_name, file_path, self.JSON_MIME)
 
     def __upload_file(self, cloud_file_name, file_path, file_mime):
         file_metadata = {
