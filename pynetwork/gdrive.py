@@ -27,13 +27,13 @@ class GoogleDriveApi:
     #Full, permissive scope to access all of a user's files, excluding the Application Data folder.
     GOD_MODE_DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive'
 
-    CLIENT_SECRET_FILE = 'secrets/client_secret.json'
+    CLIENT_SECRET_FILE = 'secrets/client.secret.json'
     APPLICATION_NAME = 'pyNetCheck'
     CREDENTIAL_JSON = APPLICATION_NAME + ".json"
 
     APPLICATION_ROOT_FOLDER_ID = None
     APPLICATION_ROOT_FOLDER_ID_KEY = "APPLICATION_ROOT_FOLDER_ID"
-    SHELVE_FILE = "/shelve/.cache"
+    SHELVE_FILE = ".cache"
 
     #mime types
     PLAIN_TEXT_MIME = 'text/plain'

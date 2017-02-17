@@ -32,7 +32,7 @@ class GlobalConfig:
         self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
         self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
         self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
-        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secrets.json"
+        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secret.json"
 
         json_config = fsutil.read_json_from_file(self.CONFIG_JSON_FILE)
 

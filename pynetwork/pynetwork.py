@@ -49,7 +49,7 @@ def __main(config):
 
     chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
 
-    if config.get_upload_results_to_gdrive:
+    if config.get_upload_results_to_gdrive and fsutil.file_exist(chart_path):
         GoogleDriveApi().upload_html_file(timeutil.format_to_date_str(time_stamp),chart_path)
 
 def main():

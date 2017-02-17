@@ -12,7 +12,11 @@ cSpell.json
 **/shelve/*.bak
 **/shelve/*.dat
 **/shelve/*.dat
+*.cache
 *.dir
+*.cache
+**/pynetwork.cache
 
 #secrets
-**/secrets/
+**/secrets/client.secret.json
+**/secrets/mail.secret.json

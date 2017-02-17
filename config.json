@@ -1,7 +1,7 @@
 {   
     "uploadResultsToGdrive" : true,
-    "realNetworkCheck" : false,
+    "realNetworkCheck" : true,
     "writeLocalHtml" : true,
-    "sendMail": false,
+    "sendMail": true,
     "attachMailChart" : true
 }
