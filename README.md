@@ -36,6 +36,7 @@ netcheck.py -u 4
 	//device gmail password
 	"agentGmailPassword" : "<agent gmail password>"
 }
+```
 
 ##Data Files:
 
@@ -49,8 +50,10 @@ Data files hierarchy:
 ```
 
 ## Dependencies
+
 ```
 pip install pyspeedtest
 pip install mail
 pip install requests
+
 ```
