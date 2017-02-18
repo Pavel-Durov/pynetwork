@@ -46,8 +46,6 @@ If you want to send mail you'll need to fill ./secret/mail.secrets.json file:
 	"agentGmailPassword" : "<agent gmail password>"
 }
 ```
-
-```
 ##Data Files:
 
 netcheck.py generates data files as its output. So you can browse history of your network performance.
