@@ -18,5 +18,5 @@ cSpell.json
 **/pynetwork.cache
 
 #secrets
-#**/secrets/client.secret.json
-#**/secrets/mail.secret.json
+**/secrets/client.secret.json
+**/secrets/mail.secret.json
