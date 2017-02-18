@@ -1,22 +1,22 @@
 import os
 import fsutil
 import datetime
+import timeutil
 
 class GlobalConfig:
     """Global configuration for network speed check"""
 
-    PROJ_PATH = ''
-    MAIN_CSS_PATH = ''
-    OUTPUT_HTML_FILE = ''
-    ANALYTICS_OUTPUT_DIR = ''
-    CHART_HTML_DIR = ''
-    CONFIG_JSON_FILE = ''
+    PROJ_PATH = None
+    MAIN_CSS_PATH = None
+    OUTPUT_HTML_FILE = None
+    ANALYTICS_OUTPUT_DIR = None
+    CHART_HTML_DIR = None
+    CONFIG_JSON_FILE = None
     CHART_HTML_POSTFIX = "_chart.html"
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
     JSON_DATA_FILENAME = "_data.json"
 
-    EMAIL_SEND_LEGIT_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     UNSET_CONSTRAINT = -1
 
 
@@ -32,7 +32,8 @@ class GlobalConfig:
         self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
         self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
         self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
-        self.CONFIG_JSON_FILE = self.PROJ_PATH + "/config.json"
+        self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
+        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secret.json"
 
         json_config = fsutil.read_json_from_file(self.CONFIG_JSON_FILE)
 
@@ -44,12 +45,21 @@ class GlobalConfig:
         self.__send_mail = json_config["sendMail"]
         #Sets for attaching chart html to mail
         self.__attach_mail_chart = json_config["attachMailChart"]
+        self.__upload_results_to_gdrive = json_config["uploadResultsToGdrive"]
 
-        self.__receiver_gmail_account = json_config["receiverGmailAccount"]
-        self.__agent_gmail_account = json_config["agentGmailAccount"]
+        json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
+        self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
+        self.__agent_gmail_account = json_secret["agentGmailAccount"]
         #This is way insecure : Figureout how to sore password in more reliable way (keyring?)
-        self.__agent_gmail_password = json_config["agentGmailPassword"]
-        
+        self.__agent_gmail_password = json_secret["agentGmailPassword"]
+
+
+
+    @property
+    def get_upload_results_to_gdrive(self):
+        """Configuration for whether upload test reusult to google drive"""
+        return self.__upload_results_to_gdrive
+
     @property
     def get_receiver_gmail_account(self):
         """Receiver gmail account"""
@@ -106,10 +116,10 @@ class GlobalConfig:
         else:
             return value
 
-
-    def is_legit_hour_for_mail(self, time_stamp):
+    @staticmethod
+    def is_legit_hour_for_mail(time_stamp):
         """Checks whether the given date is in range of email sending hours configuration"""
-        return time_stamp.hour in self.EMAIL_SEND_LEGIT_HOURS
+        return timeutil.to_local_time(time_stamp).hour in [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 
 class SpeedTestResult:

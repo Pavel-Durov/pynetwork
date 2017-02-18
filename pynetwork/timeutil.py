@@ -22,3 +22,7 @@ def  format_to_date_str(time):
 def format_to_time_str(time):
     """Constructs and returns formatted time string, base on given timestamp"""
     return time.strftime(DATE_TIME_FORMAT)
+
+def to_local_time(datetime_utc):
+    """Converts utc time to local time"""
+    return datetime_utc - datetime.timedelta(seconds=time.timezone)

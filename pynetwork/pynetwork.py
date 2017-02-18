@@ -1,18 +1,19 @@
 """ Network Upload, Download, Ping speed check script"""
 #!/usr/bin/python
 
+import chart
 import argparse
-import pyspeedtest
+import fsutil
 import timeutil
+import pyspeedtest
 from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
 from models import SpeedTestResult
 from analytics import DataDump
-from chart import ChartGenerator
+from gdrive import GoogleDriveApi
 
-def check_speed():
-    """Network Speed Check"""
+def __check_speed():
     print("Network speed check is running")
 
     speed_test = pyspeedtest.SpeedTest()
@@ -27,7 +28,7 @@ def check_speed():
 
 def __main(config):
     if config.get_real_network_check:
-        speed_result = check_speed()
+        speed_result = __check_speed()
     else:
         speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
 
@@ -40,12 +41,18 @@ def __main(config):
     email_sender = EmailSender(config)
     time_stamp = speed_result.get_time_stamp
 
-    ChartGenerator(config).generate_chart(time_stamp)
+    chart.ChartGenerator(config).generate_chart(time_stamp)
 
     if config.get_send_mail and config.is_legit_hour_for_mail(time_stamp):
         email_sender.send_gmail(message)
 
-if __name__ == "__main__":
+    chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
+
+    if config.get_upload_results_to_gdrive and fsutil.file_exist(chart_path):
+        file_name = fsutil.get_file_name(chart_path)
+        GoogleDriveApi().upload_html_file(file_name, chart_path)
+
+def main():
     arg_parser = argparse.ArgumentParser()
 
     arg_parser.add_argument("-d", help="Download speed constraint", type=float)
@@ -57,6 +64,9 @@ if __name__ == "__main__":
     configuration = GlobalConfig(args.u, args.d, args.p)
 
     __main(configuration)
+
+if __name__ == "__main__":
+    main()
 
 
 
