@@ -31,8 +31,11 @@ netcheck.py -u 4
     "attachMailChart" : true
 }
 
+```
+
 ### Sending mail (Gmail only)
 If you want to send mail you'll need to fill ./secret/mail.secrets.json file:
+
 ```
 {
 	//Mail receiver
@@ -42,11 +45,13 @@ If you want to send mail you'll need to fill ./secret/mail.secrets.json file:
 	//device gmail password
 	"agentGmailPassword" : "<agent gmail password>"
 }
+
 ```
 ##Data Files:
 
 netcheck.py generates data files as its output. So you can browse history of your network performance.
 * Daily charts can be found under : ./data/<date>chart.html
+
 ```
 Data files hierarchy:
 	./data
@@ -55,10 +60,12 @@ Data files hierarchy:
 ```
 
 ## Dependencies
+
 ```
 pip install pyspeedtest
 pip install mail
 pip install requests
 pip install --upgrade google-api-python-client
 pip install httplib2
+
 ```
