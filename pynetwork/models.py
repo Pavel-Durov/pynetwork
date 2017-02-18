@@ -1,6 +1,7 @@
 import os
 import fsutil
 import datetime
+import timeutil
 
 class GlobalConfig:
     """Global configuration for network speed check"""
@@ -118,7 +119,7 @@ class GlobalConfig:
     @staticmethod
     def is_legit_hour_for_mail(time_stamp):
         """Checks whether the given date is in range of email sending hours configuration"""
-        return time_stamp.hour in [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+        return timeutil.to_local_time(time_stamp).hour in [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
 
 class SpeedTestResult:

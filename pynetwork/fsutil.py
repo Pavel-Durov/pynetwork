@@ -67,3 +67,8 @@ def read_json_from_file(file_path):
             return json.loads("[]")
     except IOError:
         print("IO ERROR - " + file_path)
+
+def get_file_name(filename):
+    """Returns file name from path""" 
+    splitted = filename.split("/")
+    return filename.split("/")[len(splitted) -1]

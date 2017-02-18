@@ -13,8 +13,7 @@ from models import SpeedTestResult
 from analytics import DataDump
 from gdrive import GoogleDriveApi
 
-def check_speed():
-    """Network Speed Check"""
+def __check_speed():
     print("Network speed check is running")
 
     speed_test = pyspeedtest.SpeedTest()
@@ -29,7 +28,7 @@ def check_speed():
 
 def __main(config):
     if config.get_real_network_check:
-        speed_result = check_speed()
+        speed_result = __check_speed()
     else:
         speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
 
@@ -50,7 +49,8 @@ def __main(config):
     chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
 
     if config.get_upload_results_to_gdrive and fsutil.file_exist(chart_path):
-        GoogleDriveApi().upload_html_file(timeutil.format_to_date_str(time_stamp),chart_path)
+        file_name = fsutil.get_file_name(chart_path)
+        GoogleDriveApi().upload_html_file(file_name, chart_path)
 
 def main():
     arg_parser = argparse.ArgumentParser()
@@ -64,7 +64,7 @@ def main():
     configuration = GlobalConfig(args.u, args.d, args.p)
 
     __main(configuration)
-    
+
 if __name__ == "__main__":
     main()
 
