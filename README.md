@@ -45,6 +45,7 @@ If you want to send mail you'll need to fill ./secret/mail.secrets.json file:
 	//device gmail password
 	"agentGmailPassword" : "<agent gmail password>"
 }
+```
 
 ```
 ##Data Files:
@@ -67,5 +68,6 @@ pip install mail
 pip install requests
 pip install --upgrade google-api-python-client
 pip install httplib2
+
 
 ```
