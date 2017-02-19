@@ -1,11 +1,5 @@
 """
-Google Api wrapper, handles authentication (based on client_secret.json) + file management
-
-First Run:
-    1. You;ll see Go to the following link in your browser: <some link> in the console output
-    2. Navigate to that ink and give permission to access Google Drive with th desired account
-    3. Copy generated code
-    4. Paste it into the console (Enter verification code:)
+Google Api wrapper, handles authentication (based on client_secret.json) and file management
 """
 
 import os
@@ -106,4 +100,4 @@ class GoogleDriveApi:
         print('File uploaded file ID: %s' % file.get('id'))
 
 if __name__ == "__main__":
-    drive_api = GoogleDriveApi()
+    GoogleDriveApi()

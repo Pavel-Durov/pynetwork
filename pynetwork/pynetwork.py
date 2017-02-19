@@ -1,5 +1,5 @@
-""" Network Upload, Download, Ping speed check script"""
 #!/usr/bin/python
+""" Network Upload, Download, Ping speed check script"""
 
 import chart
 import argparse
@@ -53,7 +53,10 @@ def __main(config):
         GoogleDriveApi().upload_html_file(file_name, chart_path)
 
 def main():
-    arg_parser = argparse.ArgumentParser()
+
+    arg_parser = argparse.ArgumentParser(
+        description='Network upload, download, ping speed check and notifications script',
+        usage='%(prog)s [OPTION]...')
 
     arg_parser.add_argument("-d", help="Download speed constraint", type=float)
     arg_parser.add_argument("-u", help="Upload speed constraint", type=float)
