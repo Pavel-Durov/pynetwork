@@ -1,9 +1,12 @@
 """Script for generating html chart file (./html directory) based on local data files"""
 
+
 import json
 import fsutil
 import timeutil
 import analytics
+from jinja2 import Environment
+
 
 def get_daily_chart_path(config, time):
     """Returns full path of todays' chart """
@@ -13,8 +16,16 @@ def get_daily_chart_path(config, time):
 
 class ChartGenerator:
     """Generated html chars using Chart.js lib"""
+
+    CHART_TEMPLATE__PATH = None
+
     def __init__(self, config):
         self.__config = config
+        self.CHART_TEMPLATE__PATH = config.PROJ_PATH + "/html_templates/chart_template.html"
+        self.__env = Environment(line_statement_prefix='%',
+                                 variable_start_string="${",
+                                 variable_end_string="}")
+
 
     def generate_chart(self, time_stamp):
         """Generates chart based on given data, and outputs html file with the result
@@ -35,38 +46,6 @@ class ChartGenerator:
 
 
     def __generate_html(self, json_array):
-        return """
-        <!DOCTYPE html>
-        <meta charset="utf-8"/>
-        <html lang="en">
-            <head>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>	
-            </head>
-        <body>
-            <canvas id="myChart"></canvas>
-            <script>
-                var data = """+ json_array + """;
-                
-                var ctx = document.getElementById('myChart').getContext('2d');
-                uploadData = data.map(function(x){ return x.upload});
-				downloadData = data.map(function(x){ return x.download});
-                pingData = data.map(function(x){ return x.ping});
+        tmpl = self.__env.from_string(fsutil.get_file_content(self.CHART_TEMPLATE__PATH))
+        return tmpl.render(json_arr=json_array)
 
-				labels = data.map(function(x) { 
-                    return new Date((new Date(0)).setUTCSeconds(x.utcEpoch)).toLocaleTimeString()
-                });
-
-                upload_data_set = {label: 'upload', data: uploadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
-                download_data_set = {label: 'download', data: downloadData, backgroundColor: "rgba(0, 153, 51, 0.4)"};
-                ping_data_set = {label: 'ping', data: pingData, backgroundColor: "rgba(83, 83, 198, 0.4)"};
-                new Chart(ctx, {
-                    type: 'line',
-                        data: {
-                        labels: labels,
-                        datasets: [upload_data_set , download_data_set, ping_data_set]
-                    }
-                });
-            </script>
-        </body>	
-        </html>
-        """

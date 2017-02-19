@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css" media="screen">${css}</style>
+</head>
+<body class='""" + body_css_class + """'>
+    <h1>${title}</h1>
+    <div class="date">${time_stamp}<div/>
+    <div class="table">
+        <h2 class="title">Results</h2>
+        <span class="row">Ping : ${ping_speed} ms</span>
+        <span class="row">Upload speed : ${upload_speed} mbps</span>
+        <span class="row">Download speed : ${download_speed} mbps</span>
+    </div>
+    <div class="table">
+        <h2 class="title">Constraints</h2>
+        <span class="row">upload-constraint: ${upload_constraint}</span>
+    <span class="row">download-constraint: ${download_constraint}</span>
+        <span class="row">ping-constraint: ${ping_constraint}</span>
+    </div>
+</body>
+</html>
+
