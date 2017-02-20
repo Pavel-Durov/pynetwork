@@ -8,7 +8,7 @@ Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/do
 In a terminal:
 
 ```
- $ netcheck.py -u 2 -d 25 -p 4
+ $ pynetwork.py -u 2 -d 25 -p 4
 ```
 
 ```
@@ -25,7 +25,7 @@ $ pynetwork.py -h
 	-p P        Ping speed constraint
 ```
 
-### Possible Configurations (can be found in netcheck/config.json file):
+### Possible Configurations (can be found in config.json file):
 
 ```
 {
