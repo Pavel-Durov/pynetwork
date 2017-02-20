@@ -8,7 +8,7 @@ Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/do
 In a terminal:
 
 ```
- $ pynetwork.py -u 2 -d 25 -p 4
+$ pynetwork.py -u 2 -d 25 -p 4
 ```
 
 ```
