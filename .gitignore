@@ -15,8 +15,9 @@ cSpell.json
 *.cache
 *.dir
 *.cache
-**/pynetwork.cache
+
+pynetwork.cache
 
 #secrets
-**/secrets/client.secret.json
-**/secrets/mail.secret.json
+pynetwork/secrets/client.secret.json
+pynetwork/secrets/mail.secret.json
