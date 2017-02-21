@@ -80,10 +80,10 @@ Data files hierarchy:
 ## Dependencies
 
 ```
-pyspeedtest
-mail
-requests
-google-api-python-client
-httplib2
-
+pip install pyspeedtest
+pip install mail
+pip install requests
+pip install --upgrade google-api-python-client
+pip install httplib2
+pip install jinja2
 ```

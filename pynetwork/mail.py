@@ -5,11 +5,11 @@ import chart
 import time
 import fsutil
 import timeutil
-from requests import get
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.MIMEBase import MIMEBase
 from email import encoders
+from jinja2 import Environment
 
 class EmailSender:
     """Responsible for emails sending"""
@@ -67,13 +67,17 @@ class MessageFormatter:
 
     def __init__(self, config):
         self.__config = config
+        self.MAIL_TEMPLATE_PATH = config.PROJ_PATH + "/html_templates/mail_template.html"
+        self.__env = Environment(line_statement_prefix='%',
+                                 variable_start_string="${",
+                                 variable_end_string="}")
 
     def format_message(self, result):
         """Formats message as html"""
         html = self.__create_html(result)
 
         if self.__config.get_write_html_file:
-            self.__write_to_file(html)
+            fsutil.write_to_file(self.__config.OUTPUT_HTML_FILE, html)
 
         return html
 
@@ -126,64 +130,27 @@ class MessageFormatter:
 
         return {'content': title, 'status':  ok_status}
 
-    def __get_css(self):
-        """Reads css from MAIN_CSS_PATH file"""
-        try:
-            with open(self.__config.MAIN_CSS_PATH, 'r') as content_file:
-                content = content_file.read()
-            return content
-        except IOError:
-            print("FileNotFound, path: " + self.__config.MAIN_CSS_PATH)
-
-    def __write_to_file(self, html):
-        try:
-            with open(self.__config.OUTPUT_HTML_FILE, 'w+') as out_file:
-                out_file.write(html)
-        except IOError:
-            print("FileNotFound, path: " + self.__config.OUTPUT_HTML_FILE)
-
+    
+    
     def __create_html(self, result):
         title = self.__speed_check_title_html(result)
 
-        css = self.__get_css()
-        time_stamp = timeutil.format_to_time_str(result.get_time_stamp)
+        #public_ip_addr = get('https://api.ipify.org').text
+        bcss_class = self.OK_CSS_CLASS if title["status"] else self.NOT_OK_CSS_CLASS
 
-        body_css_class = ""
+        html_template = fsutil.get_file_content(self.MAIL_TEMPLATE_PATH)
+        tmpl = self.__env.from_string(html_template)
 
-        if title["status"]:
-            body_css_class = self.OK_CSS_CLASS
-        else:
-            body_css_class = self.NOT_OK_CSS_CLASS
+        return tmpl.render(css=fsutil.get_file_content(self.__config.MAIN_CSS_PATH),
+                           title=title["content"],
+                           body_css_class=bcss_class,
+                           ping_speed=str(result.get_ping_speed),
+                           upload_speed=str(result.get_upload_speed),
+                           download_speed=str(result.get_download_speed),
+                           upload_constraint=str(self.__config.get_upload_constraint),
+                           download_constraint=str(self.__config.get_downlad_constraint),
+                           ping_constraint=str(self.__config.get_ping_constraint),
+                           time_stamp=timeutil.format_to_time_str(result.get_time_stamp))
 
-        #ip_addr = get('https://api.ipify.org').text
 
-        print("download constraint: " + str(self.__config.get_downlad_constraint))
-        print("upload constraint: " + str(self.__config.get_upload_constraint))
-        print("ping constraint: " + str(self.__config.get_ping_constraint))
-
-        return  """
-        <html>
-        <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <style type="text/css" media="screen">"""+css+"""</style>
-        </head>
-        <body class='""" + body_css_class + """'>
-            <h1>""" + title["content"] + """</h1>
-            <div class="date">""" + time_stamp + """<div/>
-            <div class="table">
-                <h2 class="title">Results</h2>
-                <span class="row">Ping : """+str(result.get_ping_speed)+""" ms</span>
-                <span class="row">Upload speed : """+str(result.get_upload_speed)+""" mbps</span>
-                <span class="row">Download speed : """+str(result.get_download_speed) +""" mbps</span>
-            </div>
-            <div class="table">
-                <h2 class="title">Constraints</h2>
-                <span class="row">upload-constraint: """+str(self.__config.get_upload_constraint)+ """</span>
-            <span class="row">download-constraint: """+str(self.__config.get_downlad_constraint)+"""</span>
-                <span class="row">ping-constraint: """+str(self.__config.get_ping_constraint)+"""</span>
-            </div>
-        </body>
-        </html>
-        """
 

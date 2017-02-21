@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html lang="en">
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>	
+    </head>
+<body>
+    <canvas id="myChart"></canvas>
+    <script>
+        var data = ${json_arr};
+        
+        var ctx = document.getElementById('myChart').getContext('2d');
+        uploadData = data.map(function(x){ return x.upload});
+		downloadData = data.map(function(x){ return x.download});
+        pingData = data.map(function(x){ return x.ping});
+
+		labels = data.map(function(x) { 
+            return new Date((new Date(0)).setUTCSeconds(x.utcEpoch)).toLocaleTimeString()
+        });
+
+        upload_data_set = {label: 'upload', data: uploadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
+        download_data_set = {label: 'download', data: downloadData, backgroundColor: "rgba(0, 153, 51, 0.4)"};
+        ping_data_set = {label: 'ping', data: pingData, backgroundColor: "rgba(83, 83, 198, 0.4)"};
+        new Chart(ctx, {
+            type: 'line',
+                data: {
+                labels: labels,
+                datasets: [upload_data_set , download_data_set, ping_data_set]
+            }
+        });
+    </script>
+</body>	
+</html>
