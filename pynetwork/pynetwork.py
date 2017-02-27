@@ -43,7 +43,7 @@ def __main(config):
 
     chart.ChartGenerator(config).generate_chart(time_stamp)
 
-    if config.get_send_mail and config.is_legit_hour_for_mail(time_stamp):
+    if __check_mail_send(config, time_stamp):
         email_sender.send_gmail(message)
 
     chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
@@ -51,6 +51,11 @@ def __main(config):
     if config.get_upload_results_to_gdrive and fsutil.file_exist(chart_path):
         file_name = fsutil.get_file_name(chart_path)
         GoogleDriveApi().upload_html_file(file_name, chart_path)
+
+def __check_mail_send(config, time_stamp):
+    local_time = timeutil.to_local_time(time_stamp)
+    legit = config.is_legit_hour_for_mail(local_time)
+    return config.get_send_mail and legit and local_time.minute == 0
 
 def main():
 
