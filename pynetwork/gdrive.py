@@ -7,6 +7,7 @@ import sys
 import shelve
 import httplib2 
 import fsutil
+import logging
 from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
@@ -74,7 +75,8 @@ class GoogleDriveApi:
             flow = client.flow_from_clientsecrets(self.CLIENT_SECRET_FILE, self.GOD_MODE_DRIVE_SCOPE)
             flow.user_agent = self.APPLICATION_NAME
             credentials = tools.run_flow(flow, store)
-            print('Storing credentials to ' + credential_path)
+
+            logging.getLogger("PYNETWORK").info('Storing credentials to ' + credential_path)
 
         return credentials
 
@@ -97,7 +99,7 @@ class GoogleDriveApi:
                                             media_body=media,
                                             fields='id').execute()
 
-        print('File uploaded file ID: %s' % file.get('id'))
+        logging.getLogger("PYNETWORK").info('File uploaded file ID: %s' % file.get('id'))
 
 if __name__ == "__main__":
     GoogleDriveApi()

@@ -5,6 +5,7 @@ import chart
 import time
 import fsutil
 import timeutil
+import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.MIMEBase import MIMEBase
@@ -19,15 +20,16 @@ class EmailSender:
 
     def send_gmail(self, message_content):
         """Sends gmail to specified account"""
+        receiver = self.__config.get_receiver_gmail_account
 
-        print("sending email to: "  + self.__config.get_receiver_gmail_account)
+        logging.getLogger("PYNETWORK").info("sending email to: " + receiver)
+
         server = smtplib.SMTP(self.GMAIL_SMTP)
         server.ehlo()
         server.starttls()
 
         # Record the MIME types of both parts - text/plain and text/html.
         sender = self.__config.get_agent_gmail_account
-        receiver = self.__config.get_receiver_gmail_account
 
         msg = MIMEMultipart('alternative')
         msg['Subject'] = self.SUBJECT_EMAIL
@@ -44,7 +46,7 @@ class EmailSender:
             server.sendmail(sender, receiver, msg.as_string())
             server.quit()
         else:
-            print("could not login :(")
+            logging.getLogger("PYNETWORK").error("could not login :(")
 
     def __attach_chart(self, filename, msg):
         attachment = open(filename, "rb")
@@ -130,8 +132,6 @@ class MessageFormatter:
 
         return {'content': title, 'status':  ok_status}
 
-    
-    
     def __create_html(self, result):
         title = self.__speed_check_title_html(result)
 

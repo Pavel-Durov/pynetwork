@@ -2,8 +2,12 @@ import os
 import fsutil
 import datetime
 import timeutil
+import logging
+import logging.handlers
+
 
 LEGIT_EMAIL_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+LOG_NAME = "PYNETWORK"
 
 class GlobalConfig:
     """Global configuration for network speed check"""
@@ -54,6 +58,18 @@ class GlobalConfig:
         #This is way insecure : Figureout how to sore password in more reliable way (keyring?)
         self.__agent_gmail_password = json_secret["agentGmailPassword"]
 
+    @staticmethod
+    def init_logger():
+        """Initialize logger"""
+        my_logger = logging.getLogger(LOG_NAME)
+        my_logger.setLevel(logging.DEBUG)
+        fsutil.recheck__dir("logs")
+        # Add the log message handler to the logger
+        handler = logging.handlers.RotatingFileHandler("logs/pynetwork.out",
+                                                       maxBytes=2000)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        my_logger.addHandler(handler)
 
 
     @property
