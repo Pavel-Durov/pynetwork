@@ -6,6 +6,7 @@ import argparse
 import fsutil
 import timeutil
 import pyspeedtest
+import logging
 from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
@@ -14,19 +15,21 @@ from analytics import DataDump
 from gdrive import GoogleDriveApi
 
 def __check_speed():
-    print("Network speed check is running")
+    log = logging.getLogger("PYNETWORK")
+    log.info("Network speed check is running")
 
     speed_test = pyspeedtest.SpeedTest()
     download = round(speed_test.download() / 1000 / 1000, 2)
-    print("download speed: " + str(download))
+    log.info("download speed: " + str(download))
     upload = round(speed_test.upload() / 1000 / 1000, 2)
-    print("upload speed: " + str(upload))
+    log.info("upload speed: " + str(upload))
     ping = round(speed_test.ping(), 2)
-    print("ping speed: " + str(ping))
+    log.info("ping speed: " + str(ping))
 
     return SpeedTestResult(download, upload, ping, timeutil.utc_now())
 
-def __main(config):
+def main(config):
+    """Main function"""
     if config.get_real_network_check:
         speed_result = __check_speed()
     else:
@@ -57,8 +60,7 @@ def __check_mail_send(config, time_stamp):
     legit = config.is_legit_hour_for_mail(local_time)
     return config.get_send_mail and legit and local_time.minute == 0
 
-def main():
-
+def _parse_args():
     arg_parser = argparse.ArgumentParser(
         description='Network upload, download, ping speed check and notifications script',
         usage='%(prog)s [OPTION]...')
@@ -68,14 +70,8 @@ def main():
     arg_parser.add_argument("-p", help="Ping speed constraint", type=float)
 
     args = arg_parser.parse_args()
-
-    configuration = GlobalConfig(args.u, args.d, args.p)
-
-    __main(configuration)
+    return GlobalConfig(args.u, args.d, args.p)
 
 if __name__ == "__main__":
-    main()
-
-
-
-
+    GlobalConfig.init_logger()
+    main(_parse_args())

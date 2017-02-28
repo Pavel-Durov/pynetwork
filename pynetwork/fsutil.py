@@ -2,6 +2,7 @@
 
 import os
 import json
+import logging
 from json import JSONEncoder
 
 def recheck__dir(daily_dir):
@@ -25,24 +26,24 @@ def write_or_append(file_path, append_value, write_value):
             out_file.write(write_value)
 
         out_file.close()
-    except IOError:
-        print("IOError, path: " + file_path)
+    except IOError as e:
+        logging.getLogger("PYNETWORK").exception(e)
 
 def write_to_file(path, content):
     """Writes content to specified absolute file path"""
     try:
         with open(path, 'w') as file:
             file.write(content)
-    except IOError:
-        print("IOError, path: " + path)
+    except IOError as e:
+        logging.getLogger("PYNETWORK").exception(e)
 
 def write_json_to_file(path, data):
     """Writes json object to specified absolute file path"""
     try:
         with open(path, 'w') as outfile:
             json.dump(data, outfile)
-    except IOError:
-        print("IOError, path: " + path)
+    except IOError as e:
+        logging.getLogger("PYNETWORK").exception(e)
 
 
 def get_file_content(file_path):
@@ -50,8 +51,8 @@ def get_file_content(file_path):
     try:
         with open(file_path, 'r') as content_file:
             return content_file.read()
-    except IOError:
-        print("IO ERROR - " + file_path)
+    except IOError as e:
+        logging.getLogger("PYNETWORK").exception(e)
 
 def read_json_from_file(file_path):
     """Reads or creates new file if not exists"""
@@ -65,8 +66,8 @@ def read_json_from_file(file_path):
                 json_file.write("")
 
             return json.loads("[]")
-    except IOError:
-        print("IO ERROR - " + file_path)
+    except IOError as e:
+        logging.getLogger("PYNETWORK").exception(e)
 
 def get_file_name(filename):
     """Returns file name from path"""

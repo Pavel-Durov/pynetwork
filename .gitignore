@@ -15,7 +15,7 @@ cSpell.json
 *.cache
 *.dir
 *.cache
-
+*.out
 pynetwork.cache
 
 #secrets
