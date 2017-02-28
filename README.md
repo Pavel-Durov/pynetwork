@@ -1,6 +1,6 @@
 # Pynetwork
 
-Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/download speed mesurements and analysis.
+Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/download speed measurements and analysis.
 
 
 ## Usage
