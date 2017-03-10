@@ -21,7 +21,7 @@ def get_output_dir(time_str, config):
     fsutil.recheck__dir(out_dir)
     return out_dir
 
-class DataDump:
+class FileWriter:
     """Responsible for writing data to local files as CSV/JSON"""
     def __init__(self, conf):
         self.__conf = conf

@@ -11,12 +11,14 @@ from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
 from models import SpeedTestResult
-from analytics import DataDump
+from analytics import FileWriter
 from gdrive import GoogleDriveApi
 
 def __check_speed():
     log = logging.getLogger("PYNETWORK")
     log.info("Network speed check is running")
+
+    time_stamp = timeutil.utc_now()
 
     speed_test = pyspeedtest.SpeedTest()
     download = round(speed_test.download() / 1000 / 1000, 2)
@@ -26,39 +28,42 @@ def __check_speed():
     ping = round(speed_test.ping(), 2)
     log.info("ping speed: " + str(ping))
 
-    return SpeedTestResult(download, upload, ping, timeutil.utc_now())
+    return SpeedTestResult(download, upload, ping, time_stamp)
 
 def main(config):
     """Main function"""
+    log = logging.getLogger("PYNETWORK")
+
     if config.get_real_network_check:
         speed_result = __check_speed()
     else:
-        speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
+        speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now()) 
 
-    log = DataDump(config)
-    log.dump(speed_result)
+    file_writer = FileWriter(config)
+    file_writer.dump(speed_result)
 
     emf = MessageFormatter(config)
     message = emf.format_message(speed_result)
 
     email_sender = EmailSender(config)
     time_stamp = speed_result.get_time_stamp
-
     chart.ChartGenerator(config).generate_chart(time_stamp)
 
-    if __check_mail_send(config, time_stamp):
+    local_time = timeutil.to_local_time(time_stamp)
+    if config.get_send_hourly_mail(local_time):
+        log.info("Sending mail")
         email_sender.send_gmail(message)
 
     chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
 
-    if config.get_upload_results_to_gdrive and fsutil.file_exist(chart_path):
+    upload = config.get_upload_daily_chart_to_gdrive(local_time)
+
+    if upload and fsutil.file_exist(chart_path):
         file_name = fsutil.get_file_name(chart_path)
+        log.info("uploading daily chart to google drive")
         GoogleDriveApi().upload_html_file(file_name, chart_path)
 
-def __check_mail_send(config, time_stamp):
-    local_time = timeutil.to_local_time(time_stamp)
-    legit = config.is_legit_hour_for_mail(local_time)
-    return config.get_send_mail and legit and local_time.minute == 0
+    log.info("pynetwork, main routine end")
 
 def _parse_args():
     arg_parser = argparse.ArgumentParser(
@@ -73,5 +78,5 @@ def _parse_args():
     return GlobalConfig(args.u, args.d, args.p)
 
 if __name__ == "__main__":
-    GlobalConfig.init_logger()
+    GlobalConfig.init_logger()               
     main(_parse_args())

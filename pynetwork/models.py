@@ -22,7 +22,7 @@ class GlobalConfig:
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
     JSON_DATA_FILENAME = "_data.json"
-
+    SCRIPT_LAST_RUNNING_HOUR = 0
     UNSET_CONSTRAINT = -1
 
     def __init__(self, upload_constraint, download_constraint, ping_constraint):
@@ -50,7 +50,7 @@ class GlobalConfig:
         self.__send_mail = json_config["sendMail"]
         #Sets for attaching chart html to mail
         self.__attach_mail_chart = json_config["attachMailChart"]
-        self.__upload_results_to_gdrive = json_config["uploadResultsToGdrive"]
+        self.__upload_results_to_gdrive = json_config["gdriveUploadDailyChart"]
 
         json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
         self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
@@ -71,6 +71,22 @@ class GlobalConfig:
         handler.setFormatter(formatter)
         my_logger.addHandler(handler)
 
+    def get_upload_daily_chart_to_gdrive(self, local_time):
+        """
+            Checks the given time for last hour of a day , and config settings.
+            Returns: whether to upload the resut chart to google drive
+        """
+        last_hour_of_day = local_time.hour == self.SCRIPT_LAST_RUNNING_HOUR
+        return self.get_upload_results_to_gdrive and last_hour_of_day
+
+    def get_send_hourly_mail(self, local_time):
+        """
+            Checks the given time for legit hour and configuration setting,
+                            mail sent only on round hours - e.g every hour.
+            Returns: whether to send mail
+        """
+        legit = self.is_legit_hour_for_mail(local_time)
+        return self.get_send_mail and legit and local_time.minute == 0
 
     @property
     def get_upload_results_to_gdrive(self):
