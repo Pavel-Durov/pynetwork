@@ -50,8 +50,9 @@ class GlobalConfig:
         self.__send_mail = json_config["sendMail"]
         #Sets for attaching chart html to mail
         self.__attach_mail_chart = json_config["attachMailChart"]
-        self.__upload_results_to_gdrive = json_config["gdriveUploadDailyChart"]
-
+        self.__upload_daily_chart_to_gdrive = json_config["gdriveUploadDailyChart"]
+        self.__upload_daily_data_to_gdrive = json_config["gdriveUploadDailyData"]
+        
         json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
         self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
         self.__agent_gmail_account = json_secret["agentGmailAccount"]
@@ -71,13 +72,21 @@ class GlobalConfig:
         handler.setFormatter(formatter)
         my_logger.addHandler(handler)
 
-    def get_upload_daily_chart_to_gdrive(self, local_time):
+    def get_upload_daily_data_gdrive(self, local_time):
+        """
+            Checks the given time for last hour of a day , and config settings.
+            Returns: whether to upload the data file to google drive
+        """
+        last_hour_of_day = local_time.hour == self.SCRIPT_LAST_RUNNING_HOUR
+        return self.__upload_daily_data_to_gdrive and last_hour_of_day
+
+    def get_upload_daily_chart_gdrive(self, local_time):
         """
             Checks the given time for last hour of a day , and config settings.
             Returns: whether to upload the resut chart to google drive
         """
         last_hour_of_day = local_time.hour == self.SCRIPT_LAST_RUNNING_HOUR
-        return self.get_upload_results_to_gdrive and last_hour_of_day
+        return self.__upload_daily_chart_to_gdrive and last_hour_of_day
 
     def get_send_hourly_mail(self, local_time):
         """

@@ -34,9 +34,13 @@ class FileWriter:
         fsutil.write_json_to_file(file_path, json_data)
 
     def dump(self, speet_result):
-        """Writes speed test results to a json file"""
+        """
+            Writes speed test results to a json file
+            Returns : Path to the generated file
+        """
         json_file = get_jsondata_file_path(speet_result.get_time_stamp, self.__conf)
         self.__dump_json(speet_result, json_file)
+        return json_file
 
     def __format_to_json(self, result):
         data = {}

@@ -1,6 +1,7 @@
 {   
     "gdriveUploadDailyChart" : true,
     "realNetworkCheck" : true,
+    "gdriveUploadDailyData" : true,
     "writeLocalHtml" : true,
     "sendMail": true,
     "attachMailChart" : true

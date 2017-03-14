@@ -37,33 +37,52 @@ def main(config):
     if config.get_real_network_check:
         speed_result = __check_speed()
     else:
-        speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now()) 
+        speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
 
     file_writer = FileWriter(config)
-    file_writer.dump(speed_result)
+    data_file_path = file_writer.dump(speed_result)
 
     emf = MessageFormatter(config)
     message = emf.format_message(speed_result)
 
-    email_sender = EmailSender(config)
-    time_stamp = speed_result.get_time_stamp
-    chart.ChartGenerator(config).generate_chart(time_stamp)
+    utc_time_stamp = speed_result.get_time_stamp
+    chart.ChartGenerator(config).generate_chart(utc_time_stamp)
+    chart_path = chart.ChartGenerator(config).generate_chart(utc_time_stamp)
 
-    local_time = timeutil.to_local_time(time_stamp)
-    if config.get_send_hourly_mail(local_time):
-        log.info("Sending mail")
-        email_sender.send_gmail(message)
+    local_time = timeutil.to_local_time(utc_time_stamp)
+    __send_hourly_mail(config, local_time, message)
 
-    chart_path = chart.ChartGenerator(config).generate_chart(time_stamp)
+    google_drive = GoogleDriveApi()
 
-    upload = config.get_upload_daily_chart_to_gdrive(local_time)
+    __upload_daily_data_gdrive(google_drive,
+                               config,
+                               local_time,
+                               data_file_path)
 
-    if upload and fsutil.file_exist(chart_path):
-        file_name = fsutil.get_file_name(chart_path)
-        log.info("uploading daily chart to google drive")
-        GoogleDriveApi().upload_html_file(file_name, chart_path)
+    __upload_daily_chart_to_gdrive(google_drive,
+                                   config,
+                                   local_time,
+                                   chart_path)
+
 
     log.info("pynetwork, main routine end")
+
+def __send_hourly_mail(config, local_time, message):
+    email_sender = EmailSender(config)
+    if config.get_send_hourly_mail(local_time):
+        email_sender.send_gmail(message)
+
+def __upload_daily_data_gdrive(gdrive, config, local_time, data_file_path):
+    if config.get_upload_daily_data_gdrive(local_time):
+        file_name = fsutil.get_file_name(data_file_path)
+        gdrive.upload_json_file(file_name, data_file_path)
+
+def __upload_daily_chart_to_gdrive(gdrive, config, local_time, data_file_path):
+    upload = config.get_upload_daily_chart_gdrive(local_time)
+    if upload and fsutil.file_exist(data_file_path):
+        file_name = fsutil.get_file_name(data_file_path)
+        gdrive.upload_html_file(file_name, data_file_path)
+
 
 def _parse_args():
     arg_parser = argparse.ArgumentParser(
@@ -78,5 +97,5 @@ def _parse_args():
     return GlobalConfig(args.u, args.d, args.p)
 
 if __name__ == "__main__":
-    GlobalConfig.init_logger()               
+    GlobalConfig.init_logger()
     main(_parse_args())
