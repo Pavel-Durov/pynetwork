@@ -30,7 +30,7 @@ $ pynetwork.py -h
 ```
 {
 	//Sets whether upload daily generated chart to Google Drive
-	 "gdriveUploadDailyChart" : true,
+	"gdriveUploadDailyChart" : true,
 	//Sets whether use real time network check (mainly used for DEBUG purposes)
     "realNetworkCheck" : true,
 	//Sets whether writing local file with the mail html content

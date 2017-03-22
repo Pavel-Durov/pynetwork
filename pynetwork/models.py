@@ -22,6 +22,7 @@ class GlobalConfig:
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
     JSON_DATA_FILENAME = "_data.json"
+    JSON_WEATHER_DATA_FILENAME = "_weather_data.json"
     SCRIPT_LAST_RUNNING_HOUR = 0
     UNSET_CONSTRAINT = -1
 
@@ -52,7 +53,7 @@ class GlobalConfig:
         self.__attach_mail_chart = json_config["attachMailChart"]
         self.__upload_daily_chart_to_gdrive = json_config["gdriveUploadDailyChart"]
         self.__upload_daily_data_to_gdrive = json_config["gdriveUploadDailyData"]
-        
+
         json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
         self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
         self.__agent_gmail_account = json_secret["agentGmailAccount"]
