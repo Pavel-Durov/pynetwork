@@ -1,0 +1,8 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    // The following will hide the js and map files in the editor
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/*.map": true
+    }
+}
