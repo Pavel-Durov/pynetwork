@@ -12,8 +12,8 @@ def get_current_weather_data(city_code):
     """ Makes call to open weather map api
         Returns: weather data of given city code as json"""
     try:
-        jsonResponse = requests.get(API_URL_FORMAT.format(city_code, API_ID))
-        jsonObj = json.loads(jsonResponse.content)
-        return jsonObj["main"]
+        json_response = requests.get(API_URL_FORMAT.format(city_code, API_ID))
+        json_obj = json.loads(json_response.content)
+        return json_obj["main"]
     except Exception as e:
         logging.getLogger("PYNETWORK").exception(e)

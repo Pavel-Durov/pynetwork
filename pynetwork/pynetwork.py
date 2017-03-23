@@ -40,11 +40,12 @@ def main(config):
         speed_result = __check_speed()
     else:
         speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
-    
+
     weather_data = weather.get_current_weather_data(weather.TEL_AVIV_ID)
+    speed_result.set_weather_data(weather_data)
 
     data_file_path = fsutil.get_jsondata_file_path(speed_result.get_time_stamp, config)
-    fsutil.write_speed_result_json(speed_result, data_file_path, weather_data)
+    fsutil.write_speed_result_json(speed_result, data_file_path)
 
     emf = MessageFormatter(config)
     message = emf.format_message(speed_result)
@@ -76,16 +77,16 @@ def __send_hourly_mail(config, local_time, message):
     if config.get_send_hourly_mail(local_time):
         email_sender.send_gmail(message)
 
-def __upload_daily_data_gdrive(gdrive, config, local_time, data_file_path):
-    if config.get_upload_daily_data_gdrive(local_time):
-        file_name = fsutil.get_file_name(data_file_path)
-        gdrive.upload_json_file(file_name, data_file_path)
+# def __upload_daily_data_gdrive(gdrive, config, local_time, data_file_path):
+    # if config.get_upload_daily_data_gdrive(local_time):
+        # file_name = fsutil.get_file_name(data_file_path)
+        # gdrive.upload_json_file(file_name, data_file_path)
 
-def __upload_daily_chart_to_gdrive(gdrive, config, local_time, data_file_path):
-    upload = config.get_upload_daily_chart_gdrive(local_time)
-    if upload and fsutil.file_exist(data_file_path):
-        file_name = fsutil.get_file_name(data_file_path)
-        gdrive.upload_html_file(file_name, data_file_path)
+# def __upload_daily_chart_to_gdrive(gdrive, config, local_time, data_file_path):
+#     upload = config.get_upload_daily_chart_gdrive(local_time)
+#     if upload and fsutil.file_exist(data_file_path):
+#         file_name = fsutil.get_file_name(data_file_path)
+#         gdrive.upload_html_file(file_name, data_file_path)
 
 
 def _parse_args():

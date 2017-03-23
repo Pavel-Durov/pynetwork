@@ -9,13 +9,13 @@ import logging.handlers
 LEGIT_EMAIL_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 LOG_NAME = "PYNETWORK"
 
-class GlobalConfig:
+class GlobalConfig(object):
     """Global configuration for network speed check"""
 
     PROJ_PATH = None
     MAIN_CSS_PATH = None
     OUTPUT_HTML_FILE = None
-    ANALYTICS_OUTPUT_DIR = None
+    DATA_OUTPUT_DIR = None
     CHART_HTML_DIR = None
     CONFIG_JSON_FILE = None
     CHART_HTML_POSTFIX = "_chart.html"
@@ -36,7 +36,7 @@ class GlobalConfig:
         self.PROJ_PATH = os.path.dirname(os.path.abspath(__file__))
         self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
         self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
-        self.ANALYTICS_OUTPUT_DIR = self.PROJ_PATH + "/data/"
+        self.DATA_OUTPUT_DIR = self.PROJ_PATH + "/data/"
         self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
         self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
         self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secret.json"
@@ -97,11 +97,6 @@ class GlobalConfig:
         """
         legit = self.is_legit_hour_for_mail(local_time)
         return self.get_send_mail and legit and local_time.minute == 0
-
-    @property
-    def get_upload_results_to_gdrive(self):
-        """Configuration for whether upload test reusult to google drive"""
-        return self.__upload_results_to_gdrive
 
     @property
     def get_receiver_gmail_account(self):
@@ -165,7 +160,7 @@ class GlobalConfig:
         return time_stamp.hour in LEGIT_EMAIL_HOURS
 
 
-class SpeedTestResult:
+class SpeedTestResult(object):
     """Contains speed test result"""
 
     def __init__(self, download, upload, ping, utc_time):
@@ -173,6 +168,16 @@ class SpeedTestResult:
         self.__upload = upload
         self.__ping = ping
         self.__measurement_utc_time = utc_time
+        self.__weather_data = None
+
+    def set_weather_data(self, weather_data):
+        """Returns utc time of the measurement"""
+        self.__weather_data = weather_data
+
+    @property
+    def get_weather_data(self):
+        """Returns weather data at the measurement time"""
+        return self.__weather_data
 
     @property
     def get_time_stamp(self):
@@ -193,3 +198,15 @@ class SpeedTestResult:
     def get_ping_speed(self):
         """Returns ping speed of network speed test"""
         return self.__ping
+
+    def to_json(self):
+        """
+            Returns: json object, representing SpeedTestResult data
+        """
+        data = {}
+        data["upload"] = str(self.get_upload_speed)
+        data["download"] = str(self.get_download_speed)
+        data["ping"] = str(self.get_ping_speed)
+        data["utcEpoch"] = timeutil.utc_now_epoch()
+        data["weather"] = self.get_weather_data
+        return data

@@ -4,7 +4,6 @@
 import json
 import fsutil
 import timeutil
-import analytics
 from jinja2 import Environment
 
 
@@ -26,13 +25,12 @@ class ChartGenerator:
                                  variable_start_string="${",
                                  variable_end_string="}")
 
-
     def generate_chart(self, time_stamp):
         """Generates chart based on given data, and outputs html file with the result
             Returns:
                 path to the output chart file
         """
-        json_path = analytics.get_jsondata_file_path(time_stamp, self.__config)
+        json_path = fsutil.get_jsondata_file_path(time_stamp, self.__config)
         json_content = fsutil.read_json_from_file(json_path)
 
         html = self.__generate_html(json.dumps(json_content))
@@ -43,7 +41,6 @@ class ChartGenerator:
         path = get_daily_chart_path(self.__config, time_stamp)
         fsutil.write_to_file(path, content)
         return path
-
 
     def __generate_html(self, json_array):
         tmpl = self.__env.from_string(fsutil.get_file_content(self.CHART_TEMPLATE__PATH))

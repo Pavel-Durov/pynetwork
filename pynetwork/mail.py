@@ -12,7 +12,7 @@ from email.MIMEBase import MIMEBase
 from email import encoders
 from jinja2 import Environment
 
-class EmailSender:
+class EmailSender(object):
     """Responsible for emails sending"""
 
     SUBJECT_EMAIL = "Here is your network check update."
@@ -61,7 +61,7 @@ class EmailSender:
 
 
 
-class MessageFormatter:
+class MessageFormatter(object):
     """Formats email content"""
 
     OK_CSS_CLASS = "ok"

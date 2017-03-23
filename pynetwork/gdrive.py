@@ -14,7 +14,7 @@ from oauth2client import tools
 from oauth2client.file import Storage
 from apiclient.http import MediaFileUpload
 
-class GoogleDriveApi:
+class GoogleDriveApi(object):
     """Google Api wrapper class"""
 
     #Allows access to the Application Data folder
@@ -59,7 +59,7 @@ class GoogleDriveApi:
             'mimeType' : self.DIR_MIME
         }
         files = self.__drive_service.files()
-        file = files.create(body=file_metadata,fields='id').execute()
+        file = files.create(body=file_metadata, fields='id').execute()
         self.__shelve[self.APPLICATION_ROOT_FOLDER_ID_KEY] = file.get('id')
 
     def __get_credentials(self):
@@ -72,7 +72,8 @@ class GoogleDriveApi:
         credentials = store.get()
 
         if not credentials or credentials.invalid:
-            flow = client.flow_from_clientsecrets(self.CLIENT_SECRET_FILE, self.GOD_MODE_DRIVE_SCOPE)
+            flow = client.flow_from_clientsecrets(self.CLIENT_SECRET_FILE,
+                                                  self.GOD_MODE_DRIVE_SCOPE)
             flow.user_agent = self.APPLICATION_NAME
             credentials = tools.run_flow(flow, store)
 
@@ -96,10 +97,10 @@ class GoogleDriveApi:
 
         media = MediaFileUpload(file_path, mimetype=file_mime, resumable=True)
         file = self.__drive_service.files().create(body=file_metadata,
-                                            media_body=media,
-                                            fields='id').execute()
-
-        logging.getLogger("PYNETWORK").info('File uploaded file ID: %s' % file.get('id'))
+                                                   media_body=media,
+                                                   fields='id').execute()
+        file_id = file.get('id')
+        logging.getLogger("PYNETWORK").info('File uploaded file ID: %s' % file_id)
 
 if __name__ == "__main__":
     GoogleDriveApi()
