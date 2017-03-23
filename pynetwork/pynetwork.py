@@ -1,7 +1,10 @@
 #!/usr/bin/python
 """ Network Upload, Download, Ping speed check script"""
 
+import json
+import timeutil
 import chart
+import weather
 import argparse
 import fsutil
 import timeutil
@@ -11,7 +14,6 @@ from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
 from models import SpeedTestResult
-from analytics import FileWriter
 from gdrive import GoogleDriveApi
 
 def __check_speed():
@@ -38,9 +40,11 @@ def main(config):
         speed_result = __check_speed()
     else:
         speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
+    
+    weather_data = weather.get_current_weather_data(weather.TEL_AVIV_ID)
 
-    file_writer = FileWriter(config)
-    data_file_path = file_writer.dump(speed_result)
+    data_file_path = fsutil.get_jsondata_file_path(speed_result.get_time_stamp, config)
+    fsutil.write_speed_result_json(speed_result, data_file_path, weather_data)
 
     emf = MessageFormatter(config)
     message = emf.format_message(speed_result)
