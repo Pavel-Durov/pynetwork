@@ -77,16 +77,16 @@ def __send_hourly_mail(config, local_time, message):
     if config.get_send_hourly_mail(local_time):
         email_sender.send_gmail(message)
 
-# def __upload_daily_data_gdrive(gdrive, config, local_time, data_file_path):
-    # if config.get_upload_daily_data_gdrive(local_time):
-        # file_name = fsutil.get_file_name(data_file_path)
-        # gdrive.upload_json_file(file_name, data_file_path)
+def __upload_daily_data_gdrive(gdrive, config, local_time, data_file_path):
+    if config.get_upload_daily_data_gdrive(local_time):
+        file_name = fsutil.get_file_name(data_file_path)
+        gdrive.upload_json_file(file_name, data_file_path)
 
-# def __upload_daily_chart_to_gdrive(gdrive, config, local_time, data_file_path):
-#     upload = config.get_upload_daily_chart_gdrive(local_time)
-#     if upload and fsutil.file_exist(data_file_path):
-#         file_name = fsutil.get_file_name(data_file_path)
-#         gdrive.upload_html_file(file_name, data_file_path)
+def __upload_daily_chart_to_gdrive(gdrive, config, local_time, data_file_path):
+    upload = config.get_upload_daily_chart_gdrive(local_time)
+    if upload and fsutil.file_exist(data_file_path):
+        file_name = fsutil.get_file_name(data_file_path)
+        gdrive.upload_html_file(file_name, data_file_path)
 
 
 def _parse_args():
