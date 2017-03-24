@@ -29,16 +29,29 @@ $ pynetwork.py -h
 
 ```
 {
-	//Sets whether upload daily generated chart to Google Drive
-	"gdriveUploadDailyChart" : true,
+	//weather configurations
+	"weather":{
+		//Sets whether to include weather report 
+        "takeWeatherSamples" : true,
+		//Sets city code for current city
+        "openWeatherAPICityCode" : 293397 
+    },
+	 "gdrive" :{
+        //Sets whether upload daily json data file to Google Drive
+		"uploadDailyData" : true,
+		//Sets whether upload daily generated chart to Google Drive
+        "uploadDailyChart" : true
+    },
+	"mail" :{
+        //Sets whether send a mail when network check is completed"""
+		"sendMail": true,
+		//Sets for attaching chart html to mail
+		"attachMailChart" : true
+    },
 	//Sets whether use real time network check (mainly used for DEBUG purposes)
     "realNetworkCheck" : true,
 	//Sets whether writing local file with the mail html content
-    "writeLocalHtml" : true,
-	//Sets whether send a mail when network check is completed"""
-    "sendMail": true,
-	//Sets for attaching chart html to mail
-    "attachMailChart" : true
+    "writeLocalHtml" : true
 }
 
 ```

@@ -1,8 +1,16 @@
 {   
-    "gdriveUploadDailyChart" : true,
+    "weather":{
+        "takeWeatherSamples" : true,
+        "openWeatherAPICityCode" : 293397 
+    },
+    "gdrive" :{
+        "uploadDailyData" : true,
+        "uploadDailyChart" : true
+    },
+    "mail" :{
+        "sendMail": true,
+        "attachMailChart" : true
+    },
     "realNetworkCheck" : true,
-    "gdriveUploadDailyData" : true,
-    "writeLocalHtml" : true,
-    "sendMail": true,
-    "attachMailChart" : true
+    "writeLocalHtml" : true
 }

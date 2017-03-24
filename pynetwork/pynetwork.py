@@ -41,8 +41,9 @@ def main(config):
     else:
         speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
 
-    weather_data = weather.get_current_weather_data(weather.TEL_AVIV_ID)
-    speed_result.set_weather_data(weather_data)
+    if config.get_weather_samples_configured:
+        weather_data = weather.get_current_weather_data(config.get_openweather_api_city_code)
+        speed_result.set_weather_data(weather_data)
 
     data_file_path = fsutil.get_jsondata_file_path(speed_result.get_time_stamp, config)
     fsutil.write_speed_result_json(speed_result, data_file_path)

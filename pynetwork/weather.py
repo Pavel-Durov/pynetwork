@@ -2,9 +2,6 @@ import json
 import requests
 import logging
 
-TEL_AVIV_ID = 293397
-LONDON_ID = 2643743
-
 API_ID = "b1b15e88fa797225412429c1c50c122a1"
 API_URL_FORMAT = "http://openweathermap.org/data/2.5/weather?id={0}&appid={1}"
 

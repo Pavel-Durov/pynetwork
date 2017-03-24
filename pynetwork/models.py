@@ -47,12 +47,23 @@ class GlobalConfig(object):
         self.__real_network_check = json_config["realNetworkCheck"]
         #Sets whether writing local file with the mail html content
         self.__write_to_local_html_file = json_config["writeLocalHtml"]
-        #Sets whether send a mail when network check is completed"""
-        self.__send_mail = json_config["sendMail"]
-        #Sets for attaching chart html to mail
-        self.__attach_mail_chart = json_config["attachMailChart"]
-        self.__upload_daily_chart_to_gdrive = json_config["gdriveUploadDailyChart"]
-        self.__upload_daily_data_to_gdrive = json_config["gdriveUploadDailyData"]
+
+        mail_config = json_config["mail"]
+        if mail_config:    
+            #Sets whether send a mail when network check is completed"""
+            self.__send_mail = mail_config["sendMail"]
+            #Sets for attaching chart html to mail
+            self.__attach_mail_chart = mail_config["attachMailChart"]
+
+        gdrive_config = json_config["gdrive"]
+        if gdrive_config:
+            self.__upload_daily_chart_to_gdrive = gdrive_config["uploadDailyChart"]
+            self.__upload_daily_data_to_gdrive = gdrive_config["uploadDailyData"]
+
+        weather_config = json_config["weather"]
+        if weather_config:
+            self.__take_weather_samples = weather_config["takeWeatherSamples"]
+            self.__open_weather_api_city_code = weather_config["openWeatherAPICityCode"]
 
         json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
         self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
@@ -97,6 +108,18 @@ class GlobalConfig(object):
         """
         legit = self.is_legit_hour_for_mail(local_time)
         return self.get_send_mail and legit and local_time.minute == 0
+
+    @property
+    def get_openweather_api_city_code(self):
+        """Returns: city code by open weather api convention
+           Exaples: TEL_AVIV_ID = 293397, LONDON_ID = 2643743
+        """
+        return self.__open_weather_api_city_code
+
+    @property
+    def get_weather_samples_configured(self):
+        "Returns: whether to include weather data"
+        return self.__take_weather_samples
 
     @property
     def get_receiver_gmail_account(self):
@@ -208,5 +231,6 @@ class SpeedTestResult(object):
         data["download"] = str(self.get_download_speed)
         data["ping"] = str(self.get_ping_speed)
         data["utcEpoch"] = timeutil.utc_now_epoch()
-        data["weather"] = self.get_weather_data
+        if self.get_weather_data:
+            data["weather"] = self.get_weather_data
         return data

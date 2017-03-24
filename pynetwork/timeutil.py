@@ -15,13 +15,13 @@ def utc_now_epoch():
     """returns current utc time as epoch timestamp"""
     return int(time.time())
 
-def  format_to_date_str(time):
+def  format_to_date_str(time_stamp):
     """Constructs and returns formatted date string, base on given timestamp"""
-    return time.strftime(DATE_FORMAT)
+    return time_stamp.strftime(DATE_FORMAT)
 
-def format_to_time_str(time):
+def format_to_time_str(time_stamp):
     """Constructs and returns formatted time string, base on given timestamp"""
-    return time.strftime(DATE_TIME_FORMAT)
+    return time_stamp.strftime(DATE_TIME_FORMAT)
 
 def to_local_time(datetime_utc):
     """Converts utc time to local time"""
