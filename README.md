@@ -29,29 +29,29 @@ $ pynetwork.py -h
 
 ```
 {
-	//weather configurations
-	"weather":{
+    	//weather configurations
+    	"weather":{
 		//Sets whether to include weather report 
-        "takeWeatherSamples" : true,
+        	"takeWeatherSamples" : true,
 		//Sets city code for current city
-        "openWeatherAPICityCode" : 293397 
-    },
-	 "gdrive" :{
-        //Sets whether upload daily json data file to Google Drive
+        	"openWeatherAPICityCode" : 293397 
+    	},
+	"gdrive" :{
+        	//Sets whether upload daily json data file to Google Drive
 		"uploadDailyData" : true,
 		//Sets whether upload daily generated chart to Google Drive
-        "uploadDailyChart" : true
-    },
+        	"uploadDailyChart" : true
+    	},
 	"mail" :{
-        //Sets whether send a mail when network check is completed"""
+       		//Sets whether send a mail when network check is completed"""
 		"sendMail": true,
 		//Sets for attaching chart html to mail
 		"attachMailChart" : true
-    },
-	//Sets whether use real time network check (mainly used for DEBUG purposes)
-    "realNetworkCheck" : true,
-	//Sets whether writing local file with the mail html content
-    "writeLocalHtml" : true
+ 	},
+    	//Sets whether use real time network check (mainly used for DEBUG purposes)
+	"realNetworkCheck" : true,
+    	//Sets whether writing local file with the mail html content
+    	"writeLocalHtml" : true
 }
 
 ```
@@ -79,15 +79,15 @@ If you want to upload generated files to Google drive,
 you'll need to provide ./secrets/client.secret.json file (can be downloaded from your Google API Console)
 
 
-##Data Files:
+## Data Files:
 
 pynetwork generates data files as its output. So you can browse history of your network performance.
-* Daily charts can be found under : ./data/<date>chart.html
+* Daily charts can be found under : ./html/[date]_chart.html
 ```
 Data files hierarchy:
 	./data
 		/<date directory>
-        	/<date>_data.json    (global data file: contains all of the information)
+        		/<date>_data.json    (global data file: contains all of the information)
 ```
 
 ## Dependencies
