@@ -25,6 +25,7 @@ class GlobalConfig(object):
     JSON_WEATHER_DATA_FILENAME = "_weather_data.json"
     SCRIPT_LAST_RUNNING_HOUR = 0
     UNSET_CONSTRAINT = -1
+    PYNETWORK_GMAIL_CREDENTIALS_ENV_KEY = "PYNETWORK_GMAIL_CREDENTIALS"
 
     def __init__(self, upload_constraint, download_constraint, ping_constraint):
 
@@ -65,11 +66,20 @@ class GlobalConfig(object):
             self.__take_weather_samples = weather_config["takeWeatherSamples"]
             self.__open_weather_api_city_code = weather_config["openWeatherAPICityCode"]
 
-        json_secret = fsutil.read_json_from_file(self.SECRETS_JSON_FILE)
-        self.__receiver_gmail_account = json_secret["receiverGmailAccount"]
-        self.__agent_gmail_account = json_secret["agentGmailAccount"]
-        #This is way insecure : Figureout how to sore password in more reliable way (keyring?)
-        self.__agent_gmail_password = json_secret["agentGmailPassword"]
+        self.__fetch_gmail_credentials()
+
+    def __fetch_gmail_credentials(self):
+        if self.PYNETWORK_GMAIL_CREDENTIALS_ENV_KEY in os.environ:
+            try:
+                secret = os.environ["PYNETWORK_GMAIL_CREDENTIALS"]
+                splitted = secret.split(";")
+                self.__receiver_gmail_account = splitted[0]
+                self.__agent_gmail_account = splitted[1]
+                self.__agent_gmail_password = splitted[2]
+            except Exception as ex:
+                logging.getLogger("PYNETWORK").exception(ex)
+        else:
+            self.__send_mail = False
 
     @staticmethod
     def init_logger():

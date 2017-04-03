@@ -57,18 +57,10 @@ $ pynetwork.py -h
 ```
 
 ### Sending mail (Gmail only)
-If you want to send mail you'll need to fill ./secret/mail.secrets.json file:
+If you want to send mail you'll need to provide the following environment variables (separated by semi columns):
 
-```
-{
-	//Mail receiver
-	"recieverGmailAccount" : "<receiver gmail account>",
-	//device gmail account
-	"agentGmailAccount" : "<agent gmail account>",
-	//device gmail password
-	"agentGmailPassword" : "<agent gmail password>"
-}
-```
+PYNETWORK_GMAIL_CREDENTIALS = receiver-gail-account;agent-gmail-account;agent-gmail-password
+
 
 ## chart screenshot
 ![screenshot](chart_screenshot.png)
