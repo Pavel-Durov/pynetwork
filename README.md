@@ -58,9 +58,9 @@ $ pynetwork.py -h
 
 ### Sending mail (Gmail only)
 If you want to send mail you'll need to provide the following environment variables (separated by semi columns):
-
+```
 PYNETWORK_GMAIL_CREDENTIALS = receiver-gail-account;agent-gmail-account;agent-gmail-password
-
+```
 
 ## chart screenshot
 ![screenshot](chart_screenshot.png)
