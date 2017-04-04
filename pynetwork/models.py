@@ -49,8 +49,10 @@ class GlobalConfig(object):
         #Sets whether writing local file with the mail html content
         self.__write_to_local_html_file = json_config["writeLocalHtml"]
 
+        self.__slack_bot_enabled = json_config["slackBotEnabled"]
+
         mail_config = json_config["mail"]
-        if mail_config:    
+        if mail_config:
             #Sets whether send a mail when network check is completed"""
             self.__send_mail = mail_config["sendMail"]
             #Sets for attaching chart html to mail
@@ -118,6 +120,11 @@ class GlobalConfig(object):
         """
         legit = self.is_legit_hour_for_mail(local_time)
         return self.get_send_mail and legit and local_time.minute == 0
+
+    @property
+    def get_slack_bot_enabled(self):
+        """Returns whether slack bot is configured"""
+        return self.__slack_bot_enabled
 
     @property
     def get_openweather_api_city_code(self):

@@ -2,6 +2,7 @@
 """ Network Upload, Download, Ping speed check script"""
 
 import json
+import slack
 import timeutil
 import chart
 import weather
@@ -58,6 +59,8 @@ def main(config):
     local_time = timeutil.to_local_time(utc_time_stamp)
     __send_hourly_mail(config, local_time, message)
 
+    __update_slack(config, speed_result)
+
     google_drive = GoogleDriveApi()
 
     __upload_daily_data_gdrive(google_drive,
@@ -70,8 +73,14 @@ def main(config):
                                    local_time,
                                    chart_path)
 
-
     log.info("pynetwork, main routine end")
+
+def __update_slack(config, speed_result):
+    if config.get_slack_bot_enabled:
+        bot = slack.SlackPyNetworkBot(config)
+        message = bot.compose_speed_result_message(speed_result)
+        bot.send_message(message, bot.DEFAULT_CHANNEL)
+
 
 def __send_hourly_mail(config, local_time, message):
     email_sender = EmailSender(config)

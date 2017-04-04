@@ -1,0 +1,4 @@
+*This is your speed result*
+:point_right: ping : ${ping_result}
+:point_up: upload : ${upload_result}
+:point_down: download : ${download_result}
