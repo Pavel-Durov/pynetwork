@@ -65,7 +65,7 @@ If you want to send mail you'll need to provide the following environment variab
 PYNETWORK_GMAIL_CREDENTIALS = receiver-gail-account;agent-gmail-account;agent-gmail-password
 ```
 
-### Slack bot (Gmail only)
+### Slack bot
 If you want to receive slack bot updates in your slack channel, you will need to set the following environment variable:
 
 ```
