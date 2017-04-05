@@ -13,5 +13,9 @@
     },
     "realNetworkCheck" : true,
     "writeLocalHtml" : true,
-    "slackBotEnabled" : true
+    "writeLocalHtml" : false,
+    "slack" : {
+        "enabled" : true,
+        "channel" : "#network-updates"
+    }
 }

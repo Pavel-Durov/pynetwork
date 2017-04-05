@@ -6,7 +6,7 @@ from slackclient import SlackClient
 class SlackPyNetworkBot(object):
     """Uses slack API to send messages in the defined channel as a bot user"""
     SLACK_PYNETWORK_API_TOKEN_ENV_KEY = "SLACK_PYNETWORK_API_TOKEN"
-    DEFAULT_CHANNEL = "#network-updates"
+
     MESSAGE_TEMPLATE_PATH = None
     MESSAGE_TEMPLATE_RELATIVE_PATH = "/plain_text_templates/slack_speed_test_msg_template.txt"
 

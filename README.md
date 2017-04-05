@@ -54,6 +54,11 @@ $ pynetwork.py -h
     	"writeLocalHtml" : true,
     	//Enables/Disables slack bot
     	"slackBotEnabled" : true
+    	//Slack config
+    	"slack" : {
+            "enabled" : true,
+            "channel" : "#network-updates"
+        }
 }
 
 ```

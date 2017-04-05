@@ -76,10 +76,11 @@ def main(config):
     log.info("pynetwork, main routine end")
 
 def __update_slack(config, speed_result):
-    if config.get_slack_bot_enabled:
+    slack_config = config.get_slack_config
+    if slack_config and slack_config.get_enabled:
         bot = slack.SlackPyNetworkBot(config)
         message = bot.compose_speed_result_message(speed_result)
-        bot.send_message(message, bot.DEFAULT_CHANNEL)
+        bot.send_message(message, slack_config.get_channel)
 
 
 def __send_hourly_mail(config, local_time, message):
