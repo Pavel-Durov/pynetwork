@@ -4,7 +4,7 @@ import datetime
 import timeutil
 import logging
 import logging.handlers
-
+import sys
 
 LEGIT_EMAIL_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 LOG_NAME = "PYNETWORK"
@@ -15,7 +15,7 @@ class GlobalConfig(object):
     PROJ_PATH = None
     MAIN_CSS_PATH = None
     OUTPUT_HTML_FILE = None
-    DATA_OUTPUT_DIR = None
+    DATA_OUTPUT_DIR = None  
     CHART_HTML_DIR = None
     CONFIG_JSON_FILE = None
     CHART_HTML_POSTFIX = "_chart.html"
@@ -49,8 +49,12 @@ class GlobalConfig(object):
         #Sets whether writing local file with the mail html content
         self.__write_to_local_html_file = json_config["writeLocalHtml"]
 
+        slack = json_config["slack"]
+        if slack:
+            self.__slack_config = SlackConfig(slack["enabled"], slack["channel"])
+
         mail_config = json_config["mail"]
-        if mail_config:    
+        if mail_config:
             #Sets whether send a mail when network check is completed"""
             self.__send_mail = mail_config["sendMail"]
             #Sets for attaching chart html to mail
@@ -118,6 +122,11 @@ class GlobalConfig(object):
         """
         legit = self.is_legit_hour_for_mail(local_time)
         return self.get_send_mail and legit and local_time.minute == 0
+
+    @property
+    def get_slack_config(self):
+        """Returns whether slack bot is configured"""
+        return self.__slack_config
 
     @property
     def get_openweather_api_city_code(self):
@@ -244,3 +253,17 @@ class SpeedTestResult(object):
         if self.get_weather_data:
             data["weather"] = self.get_weather_data
         return data
+
+
+class SlackConfig(object):
+    def __init__(self, enabled, channel):
+        self.__enabled = enabled
+        self.__channel = channel
+
+    @property
+    def get_enabled(self):
+        return self.__enabled
+
+    @property
+    def get_channel(self):
+        return self.__channel

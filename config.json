@@ -12,5 +12,10 @@
         "attachMailChart" : true
     },
     "realNetworkCheck" : true,
-    "writeLocalHtml" : true
+    "writeLocalHtml" : true,
+    "writeLocalHtml" : false,
+    "slack" : {
+        "enabled" : true,
+        "channel" : "#network-updates"
+    }
 }
