@@ -99,8 +99,7 @@ Data files hierarchy:
 
 ## Dependencies
 
-```
-pip install pyspeedtest
+```F
 pip install mail
 pip install requests
 pip install --upgrade google-api-python-client
