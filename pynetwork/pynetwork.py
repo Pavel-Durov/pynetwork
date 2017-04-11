@@ -11,31 +11,39 @@ import fsutil
 import timeutil
 import pyspeedtest
 import logging
+import convertutil
 from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
 from models import SpeedTestResult
 from gdrive import GoogleDriveApi
 
-def __check_speed():
-    log = logging.getLogger("PYNETWORK")
-    log.info("Network speed check is running")
 
+__program__ = 'PYNETWORK'
+__version__ = '1.0.0'
+__description__ = 'Network ping/upload/download speed measurements analysis and reports'
+
+GlobalConfig.init_logger()
+LOG = logging.getLogger(__program__)
+
+def __check_speed():
+    LOG.info("Network speed check is running")
     time_stamp = timeutil.utc_now()
 
     speed_test = pyspeedtest.SpeedTest()
-    download = round(speed_test.download() / 1000 / 1000, 2)
-    log.info("download speed: " + str(download))
-    upload = round(speed_test.upload() / 1000 / 1000, 2)
-    log.info("upload speed: " + str(upload))
+
+    download = convertutil.bytes_to_mb(speed_test.download())
+    LOG.info("download speed: " + str(download))
+    upload = convertutil.bytes_to_mb(speed_test.upload())
+    LOG.info("upload speed: " + str(upload))
     ping = round(speed_test.ping(), 2)
-    log.info("ping speed: " + str(ping))
+    LOG.info("ping speed: " + str(ping))
 
     return SpeedTestResult(download, upload, ping, time_stamp)
 
-def main(config):
-    """Main function"""
-    log = logging.getLogger("PYNETWORK")
+def main(config=None):
+    """Main entry point"""
+    LOG = logging.getLogger(__program__)
 
     if config.get_real_network_check:
         speed_result = __check_speed()
@@ -62,18 +70,10 @@ def main(config):
     __update_slack(config, speed_result)
 
     google_drive = GoogleDriveApi()
+    __gdrive_data_upload(google_drive, config, local_time, data_file_path)
+    __gdrive_chart_upload(google_drive, config, local_time, chart_path)
 
-    __upload_daily_data_gdrive(google_drive,
-                               config,
-                               local_time,
-                               data_file_path)
-
-    __upload_daily_chart_to_gdrive(google_drive,
-                                   config,
-                                   local_time,
-                                   chart_path)
-
-    log.info("pynetwork, main routine end")
+    LOG.info("pynetwork, main routine end")
 
 def __update_slack(config, speed_result):
     slack_config = config.get_slack_config
@@ -82,27 +82,25 @@ def __update_slack(config, speed_result):
         message = bot.compose_speed_result_message(speed_result)
         bot.send_message(message, slack_config.get_channel)
 
-
 def __send_hourly_mail(config, local_time, message):
     email_sender = EmailSender(config)
     if config.get_send_hourly_mail(local_time):
         email_sender.send_gmail(message)
 
-def __upload_daily_data_gdrive(gdrive, config, local_time, data_file_path):
+def __gdrive_data_upload(gdrive, config, local_time, data_file_path):
     if config.get_upload_daily_data_gdrive(local_time):
         file_name = fsutil.get_file_name(data_file_path)
         gdrive.upload_json_file(file_name, data_file_path)
 
-def __upload_daily_chart_to_gdrive(gdrive, config, local_time, data_file_path):
+def __gdrive_chart_upload(gdrive, config, local_time, data_file_path):
     upload = config.get_upload_daily_chart_gdrive(local_time)
     if upload and fsutil.file_exist(data_file_path):
         file_name = fsutil.get_file_name(data_file_path)
         gdrive.upload_html_file(file_name, data_file_path)
 
-
 def _parse_args():
     arg_parser = argparse.ArgumentParser(
-        description='Network upload, download, ping speed check and notifications script',
+        description=__description__,
         usage='%(prog)s [OPTION]...')
 
     arg_parser.add_argument("-d", help="Download speed constraint", type=float)
@@ -113,5 +111,4 @@ def _parse_args():
     return GlobalConfig(args.u, args.d, args.p)
 
 if __name__ == "__main__":
-    GlobalConfig.init_logger()
     main(_parse_args())
