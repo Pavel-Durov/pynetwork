@@ -69,7 +69,7 @@ class MessageFormatter(object):
 
     def __init__(self, config):
         self.__config = config
-        self.MAIL_TEMPLATE_PATH = config.PROJ_PATH + "/html_templates/mail_template.html"
+        self.MAIL_TEMPLATE_PATH = config.PROJ_PATH + "/templates/html_templates/mail_template.html"
         self.__env = Environment(line_statement_prefix='%',
                                  variable_start_string="${",
                                  variable_end_string="}")

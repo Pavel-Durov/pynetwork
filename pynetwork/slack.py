@@ -8,7 +8,8 @@ class SlackPyNetworkBot(object):
     SLACK_PYNETWORK_API_TOKEN_ENV_KEY = "SLACK_PYNETWORK_API_TOKEN"
 
     MESSAGE_TEMPLATE_PATH = None
-    MESSAGE_TEMPLATE_RELATIVE_PATH = "/plain_text_templates/slack_speed_test_msg_template.txt"
+    MESSAGE_TEMPLATE_FOLDER = "/templates/plain_text_templates/"
+    MESSAGE_TEMPLATE_RELATIVE_PATH = MESSAGE_TEMPLATE_FOLDER + "slack_speed_test_msg_template.txt"
 
     def __init__(self, config):
         self.MESSAGE_TEMPLATE_PATH = config.PROJ_PATH + self.MESSAGE_TEMPLATE_RELATIVE_PATH

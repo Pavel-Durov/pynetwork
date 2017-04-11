@@ -16,11 +16,11 @@ def get_daily_chart_path(config, time):
 class ChartGenerator:
     """Generated html chars using Chart.js lib"""
 
-    CHART_TEMPLATE__PATH = None
+    CHART_TEMPLATE_PATH = None
 
     def __init__(self, config):
         self.__config = config
-        self.CHART_TEMPLATE__PATH = config.PROJ_PATH + "/html_templates/chart_template.html"
+        self.CHART_TEMPLATE_PATH = config.PROJ_PATH + "/templates/html_templates/chart_template.html"
         self.__env = Environment(line_statement_prefix='%',
                                  variable_start_string="${",
                                  variable_end_string="}")
@@ -43,6 +43,6 @@ class ChartGenerator:
         return path
 
     def __generate_html(self, json_array):
-        tmpl = self.__env.from_string(fsutil.get_file_content(self.CHART_TEMPLATE__PATH))
+        tmpl = self.__env.from_string(fsutil.get_file_content(self.CHART_TEMPLATE_PATH))
         return tmpl.render(json_arr=json_array)
 
