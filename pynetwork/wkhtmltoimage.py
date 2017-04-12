@@ -48,7 +48,7 @@ def main():
     args = arg_parser.parse_args()
 
     if args.f and args.o:
-        convert_html_to_image(args.o, args.f)
+        convert_html_to_image(args.f, args.o)
 
 
 
