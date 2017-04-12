@@ -21,7 +21,16 @@
         var data = ${json_arr};
         timeStamps = extractLabels(data);
         
-        Highcharts.chart('container', {
+        var chart = Highcharts.chart({
+            chart: {
+                renderTo: 'container',
+                events: {
+                    load: function(event) {
+                        console.log(event);
+                        window.status = 'ready_to_print';
+                    }
+                }        
+            },
             title: { text: 'Network report' },
             subtitle: { text: 'pynetwork' },
             yAxis: { title: { text: 'Mbit/s' } },
@@ -43,7 +52,7 @@
                 series: {
                     animation: false,
                     pointStart: timeStamps[0],
-                    pointInterval: timeStamps[1] - timeStamps[0]
+                    pointInterval: (timeStamps[1] - timeStamps[0])
                 }
             },
             series: [
@@ -54,13 +63,15 @@
     });
 
     function filter(data, propName){
-        return data.map(x => parseFloat(x[propName]));
+        return data.map(function (x) { return parseFloat(x[propName]);});
     }
 
     function extractLabels(data){
-        return data.map(x => new Date((new Date(0))
+        return data.map(function(x){
+                            return new Date((new Date(0))
                             .setUTCSeconds(x.utcEpoch))
-                            .getTime());
+                            .getTime()
+                        });
     }
 
     </script>
