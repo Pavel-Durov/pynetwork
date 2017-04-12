@@ -43,12 +43,12 @@ def main():
         description=__description__,
         usage='%(prog)s [OPTION]...')
 
-    arg_parser.add_argument("f", help="Image file path")
-    arg_parser.add_argument("o", help="Output file path")
+    arg_parser.add_argument("html", help="Html file path")
+    arg_parser.add_argument("image", help="Image Output file path")
     args = arg_parser.parse_args()
 
-    if args.f and args.o:
-        convert_html_to_image(args.f, args.o)
+    if args:
+        convert_html_to_image(args.html, args.image)
 
 
 
