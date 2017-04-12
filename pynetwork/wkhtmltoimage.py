@@ -14,6 +14,10 @@
 
 from subprocess import call
 import logging
+import argparse
+
+__version__ = '1.0.0'
+__description__ = "Python wrapper for wkhtmltopdf library, for rendering images from html files."
 
 CMD = "wkhtmltoimage"
 XVFB_CMD = "xvfb-run " + CMD + " {0} {1}"
@@ -31,3 +35,24 @@ def convert_html_to_image(html_path, image_out_path):
         logging.getLogger("PYNETWORK").exception(ex)
 
     return False
+
+def main():
+    """Main entry point"""
+
+    arg_parser = argparse.ArgumentParser(
+        description=__description__,
+        usage='%(prog)s [OPTION]...')
+
+    arg_parser.add_argument("f", help="Image file path")
+    arg_parser.add_argument("o", help="Output file path")
+    args = arg_parser.parse_args()
+
+    if args.f and args.o:
+        convert_html_to_image(args.o, args.f)
+
+
+
+if __name__ == "__main__":
+    main()
+
+
