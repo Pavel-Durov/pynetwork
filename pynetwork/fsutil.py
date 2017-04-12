@@ -5,6 +5,14 @@ import json
 import logging
 import timeutil
 
+def swap_path_extention(chart_path, extention):
+    """
+        Returns:
+            same filename with diffrent extention
+    """
+    file_name, ext = os.path.splitext(chart_path)
+    return file_name + extention
+
 def get_jsondata_file_path(time_stamp, config):
     """Constructs and returns json data file absolute path"""
     time_str = timeutil.format_to_date_str(time_stamp)

@@ -50,8 +50,6 @@ def main():
     if args:
         convert_html_to_image(args.html, args.image)
 
-
-
 if __name__ == "__main__":
     main()
 
