@@ -5,7 +5,7 @@ import json
 import fsutil
 import timeutil
 import wkhtmltoimage
-import Environment
+from jinja2 import Environment
 
 
 def get_daily_chart_path(config, time):
