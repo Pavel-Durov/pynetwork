@@ -12,7 +12,6 @@
         "attachMailChart" : true
     },
     "realNetworkCheck" : true,
-    "writeLocalHtml" : true,
     "writeLocalHtml" : false,
     "slack" : {
         "enabled" : true,

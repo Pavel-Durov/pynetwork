@@ -12,7 +12,6 @@ import timeutil
 import pyspeedtest
 import logging
 import convertutil
-import wkhtmltoimage
 from mail import EmailSender
 from mail import MessageFormatter
 from models import GlobalConfig
@@ -63,10 +62,9 @@ def main(config=None):
 
     utc_time_stamp = speed_result.get_time_stamp
 
-    chart_path = chart.ChartGenerator(config).generate_chart(utc_time_stamp)
-
-    chart_image = fsutil.swap_path_extention(chart_path, ".jpeg")
-    wkhtmltoimage.convert_html_to_image(chart_path, chart_image)
+    charGenerator = chart.ChartGenerator(config)
+    chart_path = charGenerator.generate_chart(utc_time_stamp)
+    charGenerator.generate_chart_image(utc_time_stamp)
 
     local_time = timeutil.to_local_time(utc_time_stamp)
     __send_hourly_mail(config, local_time, message)

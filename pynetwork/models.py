@@ -15,10 +15,12 @@ class GlobalConfig(object):
     PROJ_PATH = None
     MAIN_CSS_PATH = None
     OUTPUT_HTML_FILE = None
-    DATA_OUTPUT_DIR = None  
+    DATA_OUTPUT_DIR = None
     CHART_HTML_DIR = None
+    CHART_IMG_DIR = None
     CONFIG_JSON_FILE = None
     CHART_HTML_POSTFIX = "_chart.html"
+    CHART_IMG_POSTFIX = "_chart.jpeg"
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
     UPLOADS_CSV_FILE_POSTFIX = "_uploads.csv"
     JSON_DATA_FILENAME = "_data.json"
@@ -38,7 +40,8 @@ class GlobalConfig(object):
         self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
         self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
         self.DATA_OUTPUT_DIR = self.PROJ_PATH + "/data/"
-        self.CHART_HTML_DIR = self.PROJ_PATH + "/html/"
+        self.CHART_HTML_DIR = self.PROJ_PATH + "/data/html/"
+        self.CHART_IMG_DIR = self.PROJ_PATH + "/data/chart_img/"
         self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
         self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secret.json"
 
@@ -90,7 +93,7 @@ class GlobalConfig(object):
         """Initialize logger"""
         my_logger = logging.getLogger(LOG_NAME)
         my_logger.setLevel(logging.DEBUG)
-        fsutil.recheck__dir("logs")
+        fsutil.recheck_dir("logs")
         # Add the log message handler to the logger
         handler = logging.handlers.RotatingFileHandler("logs/pynetwork.out",
                                                        maxBytes=2000)
