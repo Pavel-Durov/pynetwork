@@ -140,7 +140,7 @@ class MessageFormatter(object):
 
         html_template = fsutil.get_file_content(self.MAIL_TEMPLATE_PATH)
         tmpl = self.__env.from_string(html_template)
-
+        chart_img_src = chart.get_daily_chart_image_path(self.__config, result.get_time_stamp)
         return tmpl.render(css=fsutil.get_file_content(self.__config.MAIN_CSS_PATH),
                            title=title["content"],
                            body_css_class=bcss_class,
@@ -150,7 +150,8 @@ class MessageFormatter(object):
                            upload_constraint=str(self.__config.get_upload_constraint),
                            download_constraint=str(self.__config.get_downlad_constraint),
                            ping_constraint=str(self.__config.get_ping_constraint),
-                           time_stamp=timeutil.format_to_time_str(result.get_time_stamp))
+                           time_stamp=timeutil.format_to_time_str(result.get_time_stamp),
+                           img_src=chart_img_src)
 
 
 
