@@ -43,7 +43,7 @@ class ChartGenerator(object):
         fsutil.recheck_dir(self.__config.CHART_IMG_DIR)
         img_chart_path = get_daily_chart_image_path(self.__config, time_stamp)
         chart_path = get_daily_chart_path(self.__config, time_stamp)
-        wkhtmltoimage.convert_html_to_image(img_chart_path, chart_path)
+        wkhtmltoimage.convert_html_to_image(chart_path, img_chart_path)
 
         return img_chart_path
 
