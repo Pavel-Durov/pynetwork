@@ -11,6 +11,7 @@ from email.mime.text import MIMEText
 from email.MIMEBase import MIMEBase
 from email import encoders
 from jinja2 import Environment
+from email.MIMEImage import MIMEImage
 
 class EmailSender(object):
     """Responsible for emails sending"""
@@ -18,7 +19,7 @@ class EmailSender(object):
     SUBJECT_EMAIL = "Here is your network check update."
     GMAIL_SMTP = 'smtp.gmail.com:587'
 
-    def send_gmail(self, message_content):
+    def send_gmail(self, message_content, chart_image_path):
         """Sends gmail to specified account"""
         receiver = self.__config.get_receiver_gmail_account
 
@@ -39,6 +40,15 @@ class EmailSender(object):
         filename = chart.get_daily_chart_path(self.__config, timeutil.utc_now())
         if self.__config.get_attach_mail_chart and fsutil.file_exist(filename):
             self.__attach_chart(filename, msg)
+
+        if fsutil.file_exist(chart_image_path):
+            fp = open(chart_image_path, 'rb')
+            msgImage = MIMEImage(fp.read())
+            fp.close()
+
+            # Define the image's ID as referenced in html
+            msgImage.add_header('Content-ID', '<networkGraphImage>')
+            msg.attach(msgImage)
 
         # Attach parts into message container.
         msg.attach(MIMEText(message_content, 'html'))
@@ -140,7 +150,7 @@ class MessageFormatter(object):
 
         html_template = fsutil.get_file_content(self.MAIL_TEMPLATE_PATH)
         tmpl = self.__env.from_string(html_template)
-
+        chart_img_src = chart.get_daily_chart_image_path(self.__config, result.get_time_stamp)
         return tmpl.render(css=fsutil.get_file_content(self.__config.MAIN_CSS_PATH),
                            title=title["content"],
                            body_css_class=bcss_class,
@@ -150,7 +160,8 @@ class MessageFormatter(object):
                            upload_constraint=str(self.__config.get_upload_constraint),
                            download_constraint=str(self.__config.get_downlad_constraint),
                            ping_constraint=str(self.__config.get_ping_constraint),
-                           time_stamp=timeutil.format_to_time_str(result.get_time_stamp))
+                           time_stamp=timeutil.format_to_time_str(result.get_time_stamp),
+                           img_src=chart_img_src)
 
 
 

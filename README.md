@@ -99,11 +99,11 @@ Data files hierarchy:
 
 ## Dependencies
 
+### Python
 ```
-pip install mail
-pip install requests
-pip install --upgrade google-api-python-client
-pip install httplib2
-pip install jinja2
-pip install slackclient
+mail, requests, google-api-python-client, httplib2, jinja2, slackclient
+```
+### Linux
+```
+wkhtmltopdf, xvfb
 ```

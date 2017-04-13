@@ -61,11 +61,13 @@ def main(config=None):
     message = emf.format_message(speed_result)
 
     utc_time_stamp = speed_result.get_time_stamp
-    chart.ChartGenerator(config).generate_chart(utc_time_stamp)
-    chart_path = chart.ChartGenerator(config).generate_chart(utc_time_stamp)
+
+    charGenerator = chart.ChartGenerator(config)
+    chart_path = charGenerator.generate_chart(utc_time_stamp)
+    chart_image_path = charGenerator.generate_chart_image(utc_time_stamp)
 
     local_time = timeutil.to_local_time(utc_time_stamp)
-    __send_hourly_mail(config, local_time, message)
+    __send_hourly_mail(config, local_time, message, chart_image_path)
 
     __update_slack(config, speed_result)
 
@@ -82,10 +84,10 @@ def __update_slack(config, speed_result):
         message = bot.compose_speed_result_message(speed_result)
         bot.send_message(message, slack_config.get_channel)
 
-def __send_hourly_mail(config, local_time, message):
+def __send_hourly_mail(config, local_time, message, chart_image_path):
     email_sender = EmailSender(config)
     if config.get_send_hourly_mail(local_time):
-        email_sender.send_gmail(message)
+        email_sender.send_gmail(message, chart_image_path)
 
 def __gdrive_data_upload(gdrive, config, local_time, data_file_path):
     if config.get_upload_daily_data_gdrive(local_time):

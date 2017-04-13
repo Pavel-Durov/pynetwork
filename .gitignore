@@ -20,4 +20,3 @@ pynetwork.cache
 
 #secrets
 pynetwork/secrets/client.secret.json
-pynetwork/secrets/mail.secret.json

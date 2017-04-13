@@ -5,6 +5,14 @@ import json
 import logging
 import timeutil
 
+def swap_path_extention(chart_path, extention):
+    """
+        Returns:
+            same filename with diffrent extention
+    """
+    file_name, ext = os.path.splitext(chart_path)
+    return file_name + extention
+
 def get_jsondata_file_path(time_stamp, config):
     """Constructs and returns json data file absolute path"""
     time_str = timeutil.format_to_date_str(time_stamp)
@@ -14,7 +22,7 @@ def get_jsondata_file_path(time_stamp, config):
 def get_data_output_dir(time_str, config):
     """Constructs and returns root directory of data files"""
     out_dir = config.DATA_OUTPUT_DIR + str(time_str) + "/"
-    recheck__dir(out_dir)
+    recheck_dir(out_dir)
     return out_dir
 
 def write_speed_result_json(speet_result, path):
@@ -25,10 +33,10 @@ def write_speed_result_json(speet_result, path):
     json_data.append(speet_result.to_json())
     write_json_to_file(path, json_data)
 
-def recheck__dir(daily_dir):
+def recheck_dir(dir):
     """Creates directory if not exists"""
-    if os.path.exists(daily_dir) is False:
-        os.makedirs(daily_dir)
+    if os.path.exists(dir) is False:
+        os.makedirs(dir)
 
 def file_exist(path):
     """Returns whether the file exists"""

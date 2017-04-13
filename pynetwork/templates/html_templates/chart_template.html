@@ -1,33 +1,79 @@
 <!DOCTYPE html>
+
 <meta charset="utf-8"/>
 <html lang="en">
     <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>	
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
     </head>
+    <style>
+        #container {
+            min-width: 310px;
+            max-width: 1000px;
+            margin: 0 auto
+        }
+    </style>
 <body>
-    <canvas id="myChart"></canvas>
+  
+    <div id="container"></div>
+
     <script>
         var data = ${json_arr};
+        timeStamps = extractLabels(data);
         
-        var ctx = document.getElementById('myChart').getContext('2d');
-        uploadData = data.map(function(x){ return x.upload});
-		downloadData = data.map(function(x){ return x.download});
-        pingData = data.map(function(x){ return x.ping});
+        var chart = Highcharts.chart({
+            chart: {
+                renderTo: 'container',
+                events: {
+                    load: function(event) {
+                        console.log(event);
+                        window.status = 'ready_to_print';
+                    }
+                }        
+            },
+            title: { text: 'Network report' },
+            subtitle: { text: 'pynetwork' },
+            yAxis: { title: { text: 'Mbit/s' } },
+            xAxis: { 
+                title: { text: 'Time'},
+                type: 'datetime',
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat('%H %m %S', this.value);
+                    }
+                }
+             },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                series: {
+                    animation: false,
+                    pointStart: timeStamps[0],
+                    pointInterval: (timeStamps[1] - timeStamps[0])
+                }
+            },
+            series: [
+                { name: 'upload', data: filter(data, "upload") }, 
+                { name: 'download', data: filter(data, "download") }, 
+                { name: 'ping', data: filter(data, "ping") }
+            ]
+    });
 
-		labels = data.map(function(x) { 
-            return new Date((new Date(0)).setUTCSeconds(x.utcEpoch)).toLocaleTimeString()
-        });
+    function filter(data, propName){
+        return data.map(function (x) { return parseFloat(x[propName]);});
+    }
 
-        upload_data_set = {label: 'upload', data: uploadData, backgroundColor: "rgba(0, 122, 204, 0.4)"};
-        download_data_set = {label: 'download', data: downloadData, backgroundColor: "rgba(0, 153, 51, 0.4)"};
-        ping_data_set = {label: 'ping', data: pingData, backgroundColor: "rgba(83, 83, 198, 0.4)"};
-        new Chart(ctx, {
-            type: 'line',
-                data: {
-                labels: labels,
-                datasets: [upload_data_set , download_data_set, ping_data_set]
-            }
-        });
+    function extractLabels(data){
+        return data.map(function(x){
+                            return new Date((new Date(0))
+                            .setUTCSeconds(x.utcEpoch))
+                            .getTime()
+                        });
+    }
+
     </script>
 </body>	
 </html>
