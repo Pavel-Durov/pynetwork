@@ -61,22 +61,6 @@ $ pynetwork.py -h
         }
 }
 
-```
-
-### Sending mail (Gmail only)
-If you want to send mail you'll need to provide the following environment variables (separated by semi columns):
-
-```
-PYNETWORK_GMAIL_CREDENTIALS = receiver-gail-account;agent-gmail-account;agent-gmail-password
-```
-
-### Slack bot
-If you want to receive slack bot updates in your slack channel, you will need to set the following environment variable:
-
-```
-SLACK_PYNETWORK_API_TOKEN  
-```
-
 ## chart screenshot
 ![screenshot](chart_screenshot.png)
 
@@ -95,6 +79,21 @@ Data files hierarchy:
 	./data
 		/<date directory>
         		/<date>_data.json    (global data file: contains all of the information)
+```
+
+
+```
+### Enviroment veriables
+
+```
+// get_current_weather_dataMail secret (separated by semi columns):
+PYNETWORK_GMAIL_CREDENTIALS=[receiver-gail-account;agent-gmail-account;agent-gmail-password]
+
+// Slack api token 
+SLACK_PYNETWORK_API_TOKEN=[api-token-string-value]
+
+// Weather api token 
+WEATHER_APP_ID=[open-weather-app-id]
 ```
 
 ## Dependencies
