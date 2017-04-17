@@ -19,9 +19,7 @@ import argparse
 __version__ = '1.0.0'
 __description__ = "Python wrapper for wkhtmltopdf library, for rendering images from html files."
 
-CMD = "wkhtmltoimage"
-HTML_WINDOW_STATUS = "ready_to_print"
-XVFB_CMD = "xvfb-run " + CMD + " --window-status " + HTML_WINDOW_STATUS + " {0} {1}"
+XVFB_CMD = "xvfb-run wkhtmltoimage --window-status ready_to_print --crop-h 396 {0} {1}"
 
 def convert_html_to_image(html_path, image_out_path):
     """Converts html file to image and stores to disk
