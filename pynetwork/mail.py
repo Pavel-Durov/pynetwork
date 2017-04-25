@@ -8,10 +8,10 @@ import timeutil
 import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.MIMEBase import MIMEBase
+from email.mime.base import MIMEBase
 from email import encoders
 from jinja2 import Environment
-from email.MIMEImage import MIMEImage
+from email.mime.multipart import MIMEMultipart
 
 class EmailSender(object):
     """Responsible for emails sending"""
