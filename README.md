@@ -10,7 +10,6 @@ In a terminal:
 ```
 $ pynetwork.py -u 2 -d 25 -p 4
 ```
-
 ```
 $ pynetwork.py -h
 
@@ -60,7 +59,7 @@ $ pynetwork.py -h
             "channel" : "#network-updates"
         }
 }
-
+```
 ## chart screenshot
 ![screenshot](chart_screenshot.png)
 
@@ -78,11 +77,21 @@ pynetwork generates data files as its output. So you can browse history of your 
 Data files hierarchy:
 	./data
 		/<date directory>
+			...
         		/<date>_data.json    (global data file: contains all of the information)
+			...
+		/chart_img
+			...
+			/<date>.jpeg
+			...
+		/html
+			...
+			/<date>_chart.html
+			...
+		
 ```
 
 
-```
 ### Enviroment veriables
 
 ```
