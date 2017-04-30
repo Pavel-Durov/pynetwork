@@ -3,11 +3,10 @@
 Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/download speed measurements and analysis.
 
 ### Install
+
 In a terminal:
-```
-
-$ sudo install.sh
-
+``` 
+$ sudo install.sh 
 ```
 
 ## Usage
@@ -17,7 +16,6 @@ In a terminal:
 ```
 $ pynetwork.py -u 2 -d 25 -p 4
 ```
-
 ```
 $ pynetwork.py -h
 
@@ -67,7 +65,7 @@ $ pynetwork.py -h
             "channel" : "#network-updates"
         }
 }
-
+```
 ## chart screenshot
 ![screenshot](chart_screenshot.png)
 
@@ -87,11 +85,7 @@ Data files hierarchy:
 		/<date directory>
         		/<date>_data.json    (global data file: contains all of the information)
 ```
-
-
-```
 ### Enviroment veriables
-
 ```
 // get_current_weather_dataMail secret (separated by semi columns):
 PYNETWORK_GMAIL_CREDENTIALS=[receiver-gail-account;agent-gmail-account;agent-gmail-password]
