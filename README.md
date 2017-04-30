@@ -2,6 +2,13 @@
 
 Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/download speed measurements and analysis.
 
+### Install
+In a terminal:
+```
+
+$ sudo install.sh
+
+```
 
 ## Usage
 
@@ -94,15 +101,4 @@ SLACK_PYNETWORK_API_TOKEN=[api-token-string-value]
 
 // Weather api token 
 WEATHER_APP_ID=[open-weather-app-id]
-```
-
-## Dependencies
-
-### Python
-```
-mail, requests, google-api-python-client, httplib2, jinja2, slackclient
-```
-### Linux
-```
-wkhtmltopdf, xvfb
 ```

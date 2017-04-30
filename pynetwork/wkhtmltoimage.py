@@ -15,17 +15,32 @@
 from subprocess import call
 import logging
 import argparse
+import shutil
 
 __version__ = '1.0.0'
-__description__ = "Python wrapper for wkhtmltopdf library, for rendering images from html files."
+__description__ = "Python wrapper for wkhtmltopdf library - renders html to image (.jpeg) file"
 
-XVFB_CMD = "xvfb-run wkhtmltoimage --window-status ready_to_print --crop-h 396 {0} {1}"
+XVFB_RUN = "xvfb-run"
+WKHTML_TO_IMAGE = "wkhtmltoimage"
+XVFB_CMD = XVFB_RUN + " " + WKHTML_TO_IMAGE + " --window-status ready_to_print --crop-h 396 {0} {1}"
+
+@property
+def dependencies_installed():
+    """
+        Checks whether xvfb-run and wkhtmltoimage packages installed on local machine
+    """
+    xvfb = shutil.which(XVFB_RUN) is not None
+    wkhtml = shutil.which(WKHTML_TO_IMAGE) is not None
+    return xvfb and wkhtml
 
 def convert_html_to_image(html_path, image_out_path):
     """Converts html file to image and stores to disk
         Returns:
             whether the operations succeeded
     """
+    if dependencies_installed() is False:
+        return False
+
     try:
         cmd = XVFB_CMD.format(html_path, image_out_path)
         call(cmd, shell=True)
