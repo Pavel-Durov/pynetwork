@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-README = open('../README.md').read()
+README = open('README.md').read()
 
 setup(
     name="pynetwork",
