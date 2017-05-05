@@ -2,6 +2,12 @@
 
 Designed to run as Linux crontab job on Raspberry Pi, for network ping/upload/download speed measurements and analysis.
 
+### Install
+
+In a terminal:
+``` 
+$ sudo install.sh 
+```
 
 ## Usage
 
@@ -90,10 +96,7 @@ Data files hierarchy:
 			...
 		
 ```
-
-
 ### Enviroment veriables
-
 ```
 // get_current_weather_dataMail secret (separated by semi columns):
 PYNETWORK_GMAIL_CREDENTIALS=[receiver-gail-account;agent-gmail-account;agent-gmail-password]
@@ -105,13 +108,21 @@ SLACK_PYNETWORK_API_TOKEN=[api-token-string-value]
 WEATHER_APP_ID=[open-weather-app-id]
 ```
 
-## Dependencies
+### Runing as crontab job
+In a terminal:
+```
+$ crontab -e
+```
+Then enter the following:
+```
+# Enviroment veriables:  
 
-### Python
+SLACK_PYNETWORK_API_TOKEN=[api-token-string-value]
+PYNETWORK_GMAIL_CREDENTIALS=[receiver-gail-account;agent-gmail-account;agent-gmail-password]
+WEATHER_APP_ID=[open-weather-app-id]
+
+# Scheduling job : [Cron Time Format] [script] [parameters]
+*/5 * * * * /usr/bin/python3 /home/pynetwork/pynetwork.py -d 20 -u 2 -p 3
+
 ```
-mail, requests, google-api-python-client, httplib2, jinja2, slackclient
-```
-### Linux
-```
-wkhtmltopdf, xvfb
-```
++ This will run pynetwork.py script every 5 minutes

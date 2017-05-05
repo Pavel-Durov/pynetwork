@@ -18,5 +18,11 @@ cSpell.json
 *.out
 pynetwork.cache
 
+**/build/*
+**/build/*
+**/dist/*
+**/pynetwork.egg-info/*
+
+
 #secrets
-pynetwork/secrets/client.secret.json
+**/secrets/*
