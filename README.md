@@ -96,3 +96,22 @@ SLACK_PYNETWORK_API_TOKEN=[api-token-string-value]
 // Weather api token 
 WEATHER_APP_ID=[open-weather-app-id]
 ```
+
+### Runing as crontab job
+In a terminal:
+```
+$ crontab -e
+```
+Then enter the following:
+```
+# Enviroment veriables:  
+
+SLACK_PYNETWORK_API_TOKEN=[api-token-string-value]
+PYNETWORK_GMAIL_CREDENTIALS=[receiver-gail-account;agent-gmail-account;agent-gmail-password]
+WEATHER_APP_ID=[open-weather-app-id]
+
+# Scheduling job : [Cron Time Format] [script] [parameters]
+*/5 * * * * /usr/bin/python3 /home/pynetwork/pynetwork.py -d 20 -u 2 -p 3
+
+```
++ This will run pynetwork.py script every 5 minutes
