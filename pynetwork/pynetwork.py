@@ -43,8 +43,7 @@ def __check_speed():
 
 def main(config=None):
     """Main entry point"""
-    LOG = logging.getLogger(__program__)
-
+    
     if config.get_real_network_check:
         speed_result = __check_speed()
     else:
