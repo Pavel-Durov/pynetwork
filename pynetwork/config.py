@@ -1,24 +1,26 @@
 import os
+import sys
 import fsutil
 import datetime
 import timeutil
 import logging
 import logging.handlers
-import sys
+from configSlack import SlackConfig
 
-LEGIT_EMAIL_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 LOG_NAME = "PYNETWORK"
 
-class GlobalConfig(object):
+class Config(object):
     """Global configuration for network speed check"""
 
     PROJ_PATH = None
     MAIN_CSS_PATH = None
+    OUTPUT_HTML_DIR = None
     OUTPUT_HTML_FILE = None
     DATA_OUTPUT_DIR = None
     CHART_HTML_DIR = None
     CHART_IMG_DIR = None
     CONFIG_JSON_FILE = None
+    PYNETWORK_LOCAL_DIR = "pynetwork"
     CHART_HTML_POSTFIX = "_chart.html"
     CHART_IMG_POSTFIX = "_chart.jpeg"
     DOWNLOADS_CSV_FILE_POSTFIX = "_downloads.csv"
@@ -34,16 +36,7 @@ class GlobalConfig(object):
         self.__upload_constraint = self.__check_for_none(upload_constraint)
         self.__download_constraint = self.__check_for_none(download_constraint)
         self.__ping_constraint = self.__check_for_none(ping_constraint)
-
-        #Paths set
-        self.PROJ_PATH = os.path.dirname(os.path.abspath(__file__))
-        self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
-        self.OUTPUT_HTML_FILE = self.PROJ_PATH + "/html/email.html"
-        self.DATA_OUTPUT_DIR = self.PROJ_PATH + "/data/"
-        self.CHART_HTML_DIR = self.PROJ_PATH + "/data/html/"
-        self.CHART_IMG_DIR = self.PROJ_PATH + "/data/chart_img/"
-        self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
-        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secret.json"
+        self.__set_paths()
 
         json_config = fsutil.read_json_from_file(self.CONFIG_JSON_FILE)
 
@@ -67,6 +60,7 @@ class GlobalConfig(object):
         if gdrive_config:
             self.__upload_daily_chart_to_gdrive = gdrive_config["uploadDailyChart"]
             self.__upload_daily_data_to_gdrive = gdrive_config["uploadDailyData"]
+            self.__gdrive_enabled = gdrive_config["enabled"]
 
         weather_config = json_config["weather"]
         if weather_config:
@@ -74,6 +68,29 @@ class GlobalConfig(object):
             self.__open_weather_api_city_code = weather_config["openWeatherAPICityCode"]
 
         self.__fetch_gmail_credentials()
+
+    def __set_paths(self):
+        if Config.linux_host():
+            host_dir = "/usr/local/" + self.PYNETWORK_LOCAL_DIR
+        else:
+            host_dir = os.getenv('APPDATA') + "\\" + self.PYNETWORK_LOCAL_DIR
+
+        # output paths
+        self.PROJ_PATH = os.path.dirname(os.path.abspath(__file__))
+        self.OUTPUT_HTML_DIR = host_dir + "/html/"
+        self.OUTPUT_HTML_FILE = self.OUTPUT_HTML_DIR + "email.html"
+        self.DATA_OUTPUT_DIR = host_dir + "/data/"
+        self.CHART_HTML_DIR = host_dir + "/data/html/"
+        self.CHART_IMG_DIR = host_dir + "/data/chart_img/"
+
+        fsutil.recheck_dir(self.DATA_OUTPUT_DIR)
+        fsutil.recheck_dir(self.OUTPUT_HTML_DIR)
+
+        # input paths
+        self.MAIN_CSS_PATH = self.PROJ_PATH + "/css/mail.css"
+        self.CONFIG_JSON_FILE = self.PROJ_PATH + "/../config.json"
+        self.SECRETS_JSON_FILE = self.PROJ_PATH + "/secrets/mail.secret.json"
+
 
     def __fetch_gmail_credentials(self):
         if self.PYNETWORK_GMAIL_CREDENTIALS_ENV_KEY in os.environ:
@@ -101,6 +118,13 @@ class GlobalConfig(object):
         handler.setFormatter(formatter)
         my_logger.addHandler(handler)
 
+    @property
+    def get_gdrive_enabled(self):
+        """
+            Returns whether Google Drive integration is enabled by config.json
+        """
+        return self.__gdrive_enabled
+
     def get_upload_daily_data_gdrive(self, local_time):
         """
             Checks the given time for last hour of a day , and config settings.
@@ -116,7 +140,6 @@ class GlobalConfig(object):
         """
         last_hour_of_day = local_time.hour == self.SCRIPT_LAST_RUNNING_HOUR
         return self.__upload_daily_chart_to_gdrive and last_hour_of_day
-
     def get_send_hourly_mail(self, local_time):
         """
             Checks the given time for legit hour and configuration setting,
@@ -202,71 +225,14 @@ class GlobalConfig(object):
     @staticmethod
     def is_legit_hour_for_mail(time_stamp):
         """Checks whether the given date is in range of email sending hours configuration"""
-        return time_stamp.hour in LEGIT_EMAIL_HOURS
+        return time_stamp.hour in [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 
+    @staticmethod
+    def get_system_type():
+        """ Returns string representing system type : Linux/Windows"""
+        return sys.platform
 
-class SpeedTestResult(object):
-    """Contains speed test result"""
-
-    def __init__(self, download, upload, ping, utc_time):
-        self.__download = download
-        self.__upload = upload
-        self.__ping = ping
-        self.__measurement_utc_time = utc_time
-        self.__weather_data = None
-
-    def set_weather_data(self, weather_data):
-        """Returns utc time of the measurement"""
-        self.__weather_data = weather_data
-
-    @property
-    def get_weather_data(self):
-        """Returns weather data at the measurement time"""
-        return self.__weather_data
-
-    @property
-    def get_time_stamp(self):
-        """Returns utc time of the measurement"""
-        return self.__measurement_utc_time
-
-    @property
-    def get_download_speed(self):
-        """Returns download speed of network speed test"""
-        return self.__download
-
-    @property
-    def get_upload_speed(self):
-        """Returns upload speed of network speed test"""
-        return self.__upload
-
-    @property
-    def get_ping_speed(self):
-        """Returns ping speed of network speed test"""
-        return self.__ping
-
-    def to_json(self):
-        """
-            Returns: json object, representing SpeedTestResult data
-        """
-        data = {}
-        data["upload"] = str(self.get_upload_speed)
-        data["download"] = str(self.get_download_speed)
-        data["ping"] = str(self.get_ping_speed)
-        data["utcEpoch"] = timeutil.utc_now_epoch()
-        if self.get_weather_data:
-            data["weather"] = self.get_weather_data
-        return data
-
-
-class SlackConfig(object):
-    def __init__(self, enabled, channel):
-        self.__enabled = enabled
-        self.__channel = channel
-
-    @property
-    def get_enabled(self):
-        return self.__enabled
-
-    @property
-    def get_channel(self):
-        return self.__channel
+    @staticmethod
+    def linux_host():
+        "Returns whether running on linux system"
+        return "linux" in sys.platform

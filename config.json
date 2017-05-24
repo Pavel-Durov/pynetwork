@@ -4,6 +4,7 @@
         "openWeatherAPICityCode" : 293397 
     },
     "gdrive" :{
+        "enabled": false,
         "uploadDailyData" : true,
         "uploadDailyChart" : true
     },
@@ -11,8 +12,8 @@
         "sendMail": true,
         "attachMailChart" : true
     },
-    "realNetworkCheck" : true,
-    "writeLocalHtml" : false,
+    "realNetworkCheck" : false,
+    "writeLocalHtml" : true,
     "slack" : {
         "enabled" : true,
         "channel" : "#network-updates"

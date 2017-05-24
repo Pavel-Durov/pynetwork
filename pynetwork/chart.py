@@ -1,6 +1,5 @@
 """Script for generating html chart file (./html directory) based on local data files"""
 
-
 import json
 import fsutil
 import timeutil
