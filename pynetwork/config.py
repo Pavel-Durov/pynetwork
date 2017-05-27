@@ -52,7 +52,7 @@ class Config(object):
         mail_config = json_config["mail"]
         if mail_config:
             #Sets whether send a mail when network check is completed"""
-            self.__send_mail = mail_config["sendMail"]
+            self.__send_mail = mail_config["enabled"]
             #Sets for attaching chart html to mail
             self.__attach_mail_chart = mail_config["attachMailChart"]
 
@@ -64,7 +64,7 @@ class Config(object):
 
         weather_config = json_config["weather"]
         if weather_config:
-            self.__take_weather_samples = weather_config["takeWeatherSamples"]
+            self.__take_weather_samples = weather_config["enabled"]
             self.__open_weather_api_city_code = weather_config["openWeatherAPICityCode"]
 
         self.__fetch_gmail_credentials()
