@@ -1,6 +1,7 @@
 #!/usr/bin/python
 """ Network Upload, Download, Ping speed check script"""
 
+import sys
 import json
 import slack
 import timeutil
@@ -14,8 +15,8 @@ import logging
 import convertutil
 from mail import EmailSender
 from mail import MessageFormatter
-from models import GlobalConfig
-from models import SpeedTestResult
+from config import Config
+from testResult import TestResult
 from gdrive import GoogleDriveApi
 
 
@@ -23,7 +24,7 @@ __program__ = 'PYNETWORK'
 __version__ = '1.0.0'
 __description__ = 'Network ping/upload/download speed measurements analysis and reports'
 
-GlobalConfig.init_logger()
+Config.init_logger()
 LOG = logging.getLogger(__program__)
 
 def __check_speed():
@@ -39,15 +40,14 @@ def __check_speed():
     ping = round(speed_test.ping(), 2)
     LOG.info("ping speed: " + str(ping))
 
-    return SpeedTestResult(download, upload, ping, time_stamp)
+    return TestResult(download, upload, ping, time_stamp)
 
 def main(config=None):
     """Main entry point"""
-    
     if config.get_real_network_check:
         speed_result = __check_speed()
     else:
-        speed_result = SpeedTestResult(2, 3, 4, timeutil.utc_now())
+        speed_result = TestResult(2, 3, 4, timeutil.utc_now())
 
     if config.get_weather_samples_configured:
         weather_data = weather.get_current_weather_data(config.get_openweather_api_city_code)
@@ -61,18 +61,19 @@ def main(config=None):
 
     utc_time_stamp = speed_result.get_time_stamp
 
-    charGenerator = chart.ChartGenerator(config)
-    chart_path = charGenerator.generate_chart(utc_time_stamp)
-    chart_image_path = charGenerator.generate_chart_image(utc_time_stamp)
+    char_gen = chart.ChartGenerator(config)
+    chart_path = char_gen.generate_chart(utc_time_stamp)
+    chart_image_path = char_gen.generate_chart_image(utc_time_stamp)
 
     local_time = timeutil.to_local_time(utc_time_stamp)
     __send_hourly_mail(config, local_time, message, chart_image_path)
 
     __update_slack(config, speed_result)
 
-    google_drive = GoogleDriveApi()
-    __gdrive_data_upload(google_drive, config, local_time, data_file_path)
-    __gdrive_chart_upload(google_drive, config, local_time, chart_path)
+    if config.get_gdrive_enabled:
+        google_drive = GoogleDriveApi()
+        __gdrive_data_upload(google_drive, config, local_time, data_file_path)
+        __gdrive_chart_upload(google_drive, config, local_time, chart_path)
 
     LOG.info("pynetwork, main routine end")
 
@@ -109,7 +110,7 @@ def _parse_args():
     arg_parser.add_argument("-p", help="Ping speed constraint", type=float)
 
     args = arg_parser.parse_args()
-    return GlobalConfig(args.u, args.d, args.p)
+    return Config(args.u, args.d, args.p)
 
 if __name__ == "__main__":
     main(_parse_args())

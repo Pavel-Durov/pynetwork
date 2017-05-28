@@ -1,5 +1,7 @@
 """ Python wrapper for wkhtmltopdf library, for rendering images from html files.
         [ doc: https://wkhtmltopdf.org/docs.html ]
+    
+    * Currently supporting only Linux distributions!
 
     This script designed to be run on devices without display.
     Uses xvfb (X virtual framebuffer) for that functionality.
@@ -16,6 +18,7 @@ from subprocess import call
 import logging
 import argparse
 import shutil
+from config import Config
 
 __version__ = '1.0.0'
 __description__ = "Python wrapper for wkhtmltopdf library - renders html to image (.jpeg) file"
@@ -24,31 +27,34 @@ XVFB_RUN = "xvfb-run"
 WKHTML_TO_IMAGE = "wkhtmltoimage"
 XVFB_CMD = XVFB_RUN + " " + WKHTML_TO_IMAGE + " --window-status ready_to_print --crop-h 396 {0} {1}"
 
-@property
 def dependencies_installed():
     """
-        Checks whether xvfb-run and wkhtmltoimage packages installed on local machine
+        Checks whether xvfb-run and wkhtmltoimage packages installed on local machine.abs
     """
-    xvfb = shutil.which(XVFB_RUN) is not None
-    wkhtml = shutil.which(WKHTML_TO_IMAGE) is not None
-    return xvfb and wkhtml
+    result = False
+
+    if Config.linux_host():
+        xvfb = shutil.which(XVFB_RUN) is not None
+        wkhtml = shutil.which(WKHTML_TO_IMAGE) is not None
+        result = xvfb and wkhtml
+
+    return result
 
 def convert_html_to_image(html_path, image_out_path):
     """Converts html file to image and stores to disk
         Returns:
             whether the operations succeeded
     """
-    if dependencies_installed() is False:
-        return False
+    result = False
+    if dependencies_installed():
+        try:
+            cmd = XVFB_CMD.format(html_path, image_out_path)
+            call(cmd, shell=True)
+            result = True
+        except IOError as ex:
+            logging.getLogger("PYNETWORK").exception(ex)
 
-    try:
-        cmd = XVFB_CMD.format(html_path, image_out_path)
-        call(cmd, shell=True)
-        return True
-    except IOError as ex:
-        logging.getLogger("PYNETWORK").exception(ex)
-
-    return False
+    return result
 
 def main():
     """Main entry point"""

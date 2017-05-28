@@ -1,20 +1,21 @@
 {   
     "weather":{
-        "takeWeatherSamples" : true,
+        "enabled": true,
         "openWeatherAPICityCode" : 293397 
     },
     "gdrive" :{
+        "enabled": false,
         "uploadDailyData" : true,
         "uploadDailyChart" : true
     },
     "mail" :{
-        "sendMail": true,
+        "enabled": true,
         "attachMailChart" : true
     },
-    "realNetworkCheck" : true,
-    "writeLocalHtml" : false,
+    "realNetworkCheck" : false,
+    "writeLocalHtml" : true,
     "slack" : {
-        "enabled" : true,
+        "enabled" : false,
         "channel" : "#network-updates"
     }
 }

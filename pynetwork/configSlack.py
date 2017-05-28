@@ -1,3 +1,4 @@
+
 class SlackConfig(object):
     def __init__(self, enabled, channel):
         self.__enabled = enabled
