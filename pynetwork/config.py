@@ -10,6 +10,7 @@ import datetime
 import timeutil
 import logging
 import logging.handlers
+from os.path import expanduser
 from configSlack import SlackConfig
 
 LOG_NAME = "PYNETWORK"
@@ -76,7 +77,7 @@ class Config(object):
 
     def __set_paths(self):
         if Config.linux_host():
-            host_dir = "/usr/local/" + self.PYNETWORK_LOCAL_DIR
+            host_dir = expanduser("~/" + self.PYNETWORK_LOCAL_DIR)
         else:
             host_dir = os.getenv('APPDATA') + "\\" + self.PYNETWORK_LOCAL_DIR
 
