@@ -74,7 +74,16 @@ you'll need to provide ./secrets/client.secret.json file (can be downloaded from
 
 ## Data Files:
 
-pynetwork generates data files as its output. So you can browse history of your network performance.
+pynetwork generates data files as its output, so you can browse history of your network performance.
+
+### Pynetwork data directory:
+```
+Windows: 
+    %APPDATA%\pynetwork
+Linux: 
+    $HOME\pynetwork
+```
+
 * Daily charts can be found under : ./html/[date]_chart.html
 ```
 Data files hierarchy:
