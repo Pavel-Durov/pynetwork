@@ -56,8 +56,6 @@ $ pynetwork.py -h
 	"realNetworkCheck" : true,
     	//Sets whether writing local file with the mail html content
     	"writeLocalHtml" : true,
-    	//Enables/Disables slack bot
-    	"slackBotEnabled" : true
     	//Slack config
     	"slack" : {
             "enabled" : true,

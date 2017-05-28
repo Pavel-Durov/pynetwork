@@ -1,3 +1,8 @@
+"""
+    Config class.
+    represents global configurations for pynetwork script.
+"""
+
 import os
 import sys
 import fsutil
