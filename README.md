@@ -41,14 +41,14 @@ $ pynetwork.py -h
         	"openWeatherAPICityCode" : 293397 
     	},
 	"gdrive" :{
-			"enabled" : true,
+		"enabled" : true,
         	//Sets whether upload daily json data file to Google Drive
-			"uploadDailyData" : true,
-			//Sets whether upload daily generated chart to Google Drive
+		"uploadDailyData" : true,
+		//Sets whether upload daily generated chart to Google Drive
         	"uploadDailyChart" : true
     	},
 	"mail" :{
-       	"enabled" : true,
+        	"enabled": true,
 		//Sets for attaching chart html to mail
 		"attachMailChart" : true
  	},
